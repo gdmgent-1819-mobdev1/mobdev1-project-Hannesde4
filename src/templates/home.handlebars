@@ -1,11 +1,98 @@
+<!--
+
+-->
 {{> header }}
 <div class="page home">
-  <h1>Hello, {{user}}!</h1>
-  <div class="body">
-    This is Home page.<br>
-    Go to <a href="/about" data-path>About page</a><br />
-    Go to <a href="/firebase" data-path>Firebase example page</a><br />
-    Go to <a href="/mapbox" data-path>Mapbox example page</a><br />
+
+
+  {{!============================================================}}
+  {{!======================= Home view ==========================}}
+  {{!============================================================}}
+  <div class="home-section-main invisible" id="home-section-main">
+    <h1>Ontwikkeld voor studenten die een kot zoeken, en kotbazen (in Gent)</h1>
+    <div class="body">
+      {{ appName }} is een web applicatie die kotbazen en studenten die een kot zoeken in contact brengen met elkaar.
+    </div>
+    <button class="btn-basic btn-register-start" id="btn-register-start">
+      Registreren
+    </button>
+  </div>
+
+
+  {{!============================================================}}
+  {{!===================== Choose entity ========================}}
+  {{!============================================================}}
+  <div class="home-section-entity invisible" id="home-section-entity">
+    <button class="btn-basic" id="btn-register-start-student">Ik ben student</button>
+    <button class="btn-basic " id="btn-register-start-kotbaas">Ik ben kotbaas</button>
+  </div>
+
+
+  {{!============================================================}}
+  {{!===================== Form to register =====================}}
+  {{!============================================================}}
+  <div class="home-section-register" id="home-section-register">
+    <form class="submit-new-user" id="submit-new-user">
+
+      <label for="firstName">Voornaam</label>
+      <input type="text" name="firstname" id="firstname" placeholder="Jan">
+
+      <label for="lastName">Achternaam</label>
+      <input type="text" name="lastname" id="lastname" placeholder="Janssens">
+
+      <label for="email">Emailadres</label>
+      <input type="email" name="email" id="email" placeholder="jan.janssens@gmail.com">
+
+      <label for="phone">Tel/gsm nummer</label>
+      <input type="tel" name="phone" id="phone" placeholder="0495 12 34 56">
+
+      <label for="place">Gemeente</label>
+      <input type="text" name="place" id="place" placeholder="Gent">
+
+      <label for="adress">Straat en huisnummer</label>
+      <input type="text" name="adress" id="street" placeholder="Overpoortstraat 1">
+
+      <label for="adressExtra">Toevoeging</label>
+      <input type="text" name="adressExtra" id="extra" placeholder="bus 201">
+
+      <label for="password">Wachtwoord</label>
+      <input type="password" name="password" id="password" placeholder="wachtwoord1234">
+
+      <label for="passwordConfirm">Wachtwoord bevestigen</label>
+      <input type="password" name="passwordConfirm" id="passwordConfirm" placeholder="wachtwoord1234">
+
+      <label for="hogeschool" id="hogeschoolChoice1" class="invisible">Hogeschool</label>
+      <div class="custom-select" id="hogeschoolChoice2" class="invisible">
+        <select id="hogeschoolChoice">
+          <option>Hogeschool</option>
+          <option value="Artevelde">Artevelde Hogeschool</option>
+          <option value="HoGent">HoGent</option>
+          <option value="unifGent">Universiteit Gent</option>
+          <option value="Odisee">Odisee</option>
+        </select>
+      </div>
+
+      <input type="submit" class="btn-basic" id="btn-register-start-submit" value="Registreren">
+
+    </form>
+
+    
+  </div>
+  <button type="submit" class="btn-basic invisible" id="btn-register-start-logout">Uitloggen</button>
+
+
+  {{!============================================================}}
+  {{!===================== Form to login ========================}}
+  {{!============================================================}}
+  <div class="home-section-login invisible" id="home-section-login">
+    <form type ="get" class="login-user" id="login-user">
+        <label for="email-login">Emailadres</label>
+        <input type="email" name="email-login" id="email-login" placeholder="jan.janssens@gmail.com">
+
+        <label for="password-login">Wachtwoord</label>
+        <input type="password" name="password-login" id="password-login" placeholder="wachtwoord1234">
+      <button type="submit" class="btn-basic" id="btn-login">Inloggen</button>
+    </form>
   </div>
 </div>
-{{> footer }}
+{{!-- {{> footer }} --}}

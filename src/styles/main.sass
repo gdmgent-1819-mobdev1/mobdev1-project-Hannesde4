@@ -1,13 +1,30 @@
 @import "../../node_modules/mapbox-gl/dist/mapbox-gl.css"
+// general
+@import "./fonts"
+@import "./variables"
+@import "./page"
+@import "./home"
+@import "./header"
+@import "./footer"
+// pages
+@import "./about"
+@import "./profile"
+
 // Generic styling
+html
+    font-family: $base-font-family
 body
-    font-size: 12px
+    font-family: $base-font-family
+    font-size: 18px
     margin: 0 auto
-    background: #fefefe
+    background-color: $main-background
+    min-height: 100vh
     height: 100vh
     #app
-        height: 100%
+        min-height: 100vh
+        height: 100vh
         position: relative
+        background-color: pink
     #map
         top: 0
         bottom: 0
@@ -15,13 +32,10 @@ body
         height: 200px
         text-align: initial
         margin: 0 auto
-
-
-// general
-@import "./colors"
-@import "./page"
-@import "./header"
-@import "./footer"
-
-// pages
-@import "./about"
+.btn-basic
+    height: 40px
+    background-color: $btn-background-color
+    width: 100%
+    border: none
+.invisible
+    display: none

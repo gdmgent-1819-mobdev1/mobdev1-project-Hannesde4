@@ -1,0 +1,58 @@
+{{> header }}
+
+<div class="page home">
+    <div class="home-section-update-values" id="home-section-update-values">
+    <form class="edit-user-info" id="edit-user-info">
+
+      <label for="firstName">Voornaam</label>
+      <input type="text" name="firstname" id="firstname" placeholder="Jan">
+
+      <label for="lastName">Achternaam</label>
+      <input type="text" name="lastname" id="lastname" placeholder="Janssens">
+
+      <label for="phone">Tel/gsm nummer</label>
+      <input type="tel" name="phone" id="phone" placeholder="0495 12 34 56">
+
+      <label for="place">Gemeente</label>
+      <input type="text" name="place" id="place" placeholder="Gent">
+
+      <label for="adress">Straat en huisnummer</label>
+      <input type="text" name="adress" id="street" placeholder="Overpoortstraat 1">
+
+      <label for="adressExtra">Toevoeging</label>
+      <input type="text" name="adressExtra" id="extra" placeholder="bus 201">
+
+      <label for="hogeschool" id="hogeschoolChoice1" class="invisible">Hogeschool</label>
+      <div class="custom-select" id="hogeschoolChoice2" class="invisible">
+        <select id="hogeschoolChoice">
+          <option>Hogeschool</option>
+          <option value="Artevelde">Artevelde Hogeschool</option>
+          <option value="HoGent">HoGent</option>
+          <option value="unifGent">Universiteit Gent</option>
+          <option value="Odisee">Odisee</option>
+        </select>
+      </div>
+
+      <input type="submit" class="btn-basic" id="btn-profile-update-user-info" value="Info Wijzigen">
+
+    </form>
+
+    
+  </div>
+   <form class="edit-user-password" id="edit-user-password">
+
+        {{!-- <label for="email">Emailadres</label>
+        <input type="email" name="email" id="email" placeholder="jan.janssens@gmail.com"> --}}
+
+        <label for="passwordOld">Oud wachtwoord</label>
+        <input type="password" name="passwordOld" id="passwordOld" placeholder="">
+
+        <label for="passwordNew">Nieuw wachtwoord</label>
+            <input type="password" name="passwordNew" id="passwordNew" placeholder="">
+
+        <label for="passwordNewConfirm">Nieuw wachtwoord bevestigen</label>
+        <input type="password" name="passwordNewConfirm" id="passwordNewConfirm" placeholder="">
+
+        <input type="submit" class="btn-basic" id="btn-profile-update-password" value="Wachtwoord wijzigen">
+    </form>
+</div>
