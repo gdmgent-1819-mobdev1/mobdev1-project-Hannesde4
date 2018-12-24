@@ -15,16 +15,15 @@ html
     font-family: $base-font-family
 body
     font-family: $base-font-family
-    font-size: 18px
+    font-size: $base-font-size
     margin: 0 auto
-    background-color: $main-background
     min-height: 100vh
     height: 100vh
+    color: $main-color
     #app
         min-height: 100vh
         height: 100vh
         position: relative
-        background-color: pink
     #map
         top: 0
         bottom: 0
@@ -38,14 +37,42 @@ body
         position:relative
         label
             width: 100%
+        input
+            border: none
+            border-bottom: 1px solid $main-color
+            background-color: rgba(1,1,1,0)
+        input:focus, select:focus, textarea:focus
+            outline: none !important;
+            box-shadow: none
         input, select, textarea
             width: 100%
             height: 35px
             margin-bottom: 20px
+        h3
+            color: $base-color
+            background-color: $sec-light-color
+            padding: 10px
+            font-size: 1,375rem
+            font-weight: $base-font-weight
+    /* .addKot
+        form
+            label
+                display: block
+                float: left
+                width: 45%
+            input
+                display: block
+                float: right
+                width: auto */
+                
 .btn-basic
     height: 40px
     background-color: $btn-background-color
+    font-weight: $base-font-weight
+    font-size: 2rem
+    color: $base-color
     width: 100%
     border: none
+    border-radius: 5px
 .invisible
     display: none

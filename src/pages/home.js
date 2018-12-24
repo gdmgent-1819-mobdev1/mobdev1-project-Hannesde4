@@ -30,16 +30,9 @@ export default () => {
     signOutFirebase()
   });
 
-  //if the login button is clicked
-  document.getElementById("btn-login").addEventListener('click', function(e){
-    e.preventDefault();
-    signInFirebase();
-  });
-
   const homeMain = document.getElementById('home-section-main');
   const homeEntity = document.getElementById('home-section-entity');
   const homeRegister = document.getElementById('home-section-register');
-  const homeLogin = document.getElementById('home-section-login');
   const homeBtnLogout = document.getElementById('btn-register-start-logout');
   const btnRegKot = document.getElementById('btn-register-start-kotbaas');
   const btnRegStu = document.getElementById('btn-register-start-student');
@@ -74,14 +67,12 @@ export default () => {
       homeMain.style.display = 'none';
       homeRegister.style.display = 'none';
       homeEntity.style.display = 'none';
-      homeLogin.style.display = 'none';
       homeBtnLogout.style.display = 'block';
     } else {
       console.log('not logged in');
       homeMain.style.display = 'block';
       homeRegister.style.display = 'none';
       homeEntity.style.display = 'none';
-      homeLogin.style.display = 'none';
       homeBtnLogout.style.display = 'none';
     }
   });
@@ -90,20 +81,6 @@ export default () => {
     //========================================================
     //==================     functions     ===================
     //========================================================
-
-  //function to sign in a user
-  function signInFirebase() {
-    var email = document.getElementById('email-login').value;
-    var password = document.getElementById('password-login').value;
-
-    // Handles the sign in with email and password
-    firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // ...
-    });
-  };
   
 
   //Handles the sign up button press.
