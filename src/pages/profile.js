@@ -99,41 +99,4 @@ export default () => {
       
         return firebase.database().ref().update(updates);
     }
-
-    //functie die koten gaaat opslaan in de database
-    function writeKotData(userId, place, street, extra, lattitude, longitude, price, extraInfo, type, oppervlakte, verdieping, maxPersons, kotenInPand, douche, bad, toilet, keuken, bemeubeld) {
-        // Get a reference to the database service
-        const database = firebase.database();
-        let kotId = 1;
-        database.ref('koten/' + kotId).set({
-            "kotbaas" : userId ,
-            "adress" : {
-                "city" : place ,
-                "street" : street ,
-                "extra" : extra ,
-                "coordinates" : {
-                    "lattitude" : lattitude ,
-                    "longitude" : longitude ,
-                },
-            },
-            "info" : {
-                "prijs" : price ,
-                "extraInfo" : extraInfo ,
-                "overzicht" : {
-                    "type" : type ,
-                    "oppervlakte" : oppervlakte ,
-                    "verdieping" : verdieping ,
-                    "maxPersonen" : maxPersons ,
-                    "kotenInPand" : kotenInPand ,
-                },
-                "interieur" : {
-                    "douche" : douche ,
-                    "bad" : bad ,
-                    "toilet" : toilet ,
-                    "keuken" : keuken ,
-                    'bemeubeld' : bemeubeld ,
-                }
-            }
-        });
-    }
 };

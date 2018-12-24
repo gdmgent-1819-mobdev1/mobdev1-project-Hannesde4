@@ -44,8 +44,7 @@ export default () => {
   const btnRegKot = document.getElementById('btn-register-start-kotbaas');
   const btnRegStu = document.getElementById('btn-register-start-student');
   const btnRegStart = document.getElementById('btn-register-start');
-  const hsLabel = document.getElementById('hogeschoolChoice2');
-  const hsLabel2 = document.getElementById('hogeschoolChoice1');
+  const hsLabel2 = document.getElementById('register-hogeschoolChoice');
   let entity = "leeg";
 
   btnRegStart.onclick = function () {
@@ -57,7 +56,6 @@ export default () => {
     console.log(entity);
     homeEntity.style.display = 'none';
     homeRegister.style.display = 'block';
-    hsLabel.style.display = "block";
     hsLabel2.style.display = "block";
   };
   btnRegKot.onclick = function () {
@@ -65,7 +63,6 @@ export default () => {
     console.log(entity);
     homeEntity.style.display = 'none';
     homeRegister.style.display = 'block';
-    hsLabel.style.display = "none";
     hsLabel2.style.display = "none";
   };
 
@@ -111,18 +108,18 @@ export default () => {
 
   //Handles the sign up button press.
   function handleSignUp() {
-    let place = document.getElementById('place').value;
+    let place = document.getElementById('register-place').value;
     let lattitude = "test";
     let longitude = "test";
-    let street = document.getElementById('street').value;
-    let extra = document.getElementById('extra').value;
-    let firstName = document.getElementById('firstname').value;
-    let lastName = document.getElementById('lastname').value;
-    let hogeschool = document.getElementById('hogeschoolChoice').value;
-    let phone = document.getElementById('phone').value;
-    let email = document.getElementById('email').value;
-    let password = document.getElementById('password').value;
-    let passwordConfirm = document.getElementById('passwordConfirm').value;
+    let street = document.getElementById('register-street').value;
+    let extra = document.getElementById('register-extra').value;
+    let firstName = document.getElementById('register-firstname').value;
+    let lastName = document.getElementById('register-lastname').value;
+    let hogeschool = document.getElementById('register-hogeschoolChoice').value;
+    let phone = document.getElementById('register-phone').value;
+    let email = document.getElementById('register-email').value;
+    let password = document.getElementById('register-password').value;
+    let passwordConfirm = document.getElementById('register-passwordConfirm').value;
     if (email.length < 4) {
         alert('Vul een geldig emailadres in!');
         return;
