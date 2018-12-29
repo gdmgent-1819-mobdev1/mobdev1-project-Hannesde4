@@ -1,14 +1,16 @@
 // Only import the compile function from handlebars instead of the entire library
 import { compile } from 'handlebars';
 import update from '../helpers/update';
-
-
-const { getInstance } = require('../firebase/firebase');
-
-const firebase = getInstance();
-
-// Get a reference to the database service
-const database = firebase.database();
+import {
+    signOutFirebase , 
+    newKotToDatabase , 
+    handleFileSelect1 ,
+    handleFileSelect2 ,
+    handleFileSelect3 ,
+    generateAndStoreKotId ,
+    firebase , 
+    auth ,
+} from '../helpers/functies';
 
 
 // Import the template to use
@@ -17,86 +19,66 @@ const addKotTemplate = require('../templates/addKot.handlebars');
 export default () => {
     // Return the compiled template to the router
     update(compile(addKotTemplate)({  }));
+
+    generateAndStoreKotId();
+    console.log(generateAndStoreKotId());
+
+    //functie om de nav te laten werken
+    document.getElementById("sideNav-open").addEventListener('click', function(){
+        let element = document.getElementsByClassName("side-nav")[0];
+        element.classList.toggle("invisible");
+    });
+    document.getElementById("sideNav-close").addEventListener('click', function(){
+        let element = document.getElementsByClassName("side-nav")[0];
+        element.classList.toggle("invisible");
+    });
+
+    //if the logout button is clicked
+    document.getElementById("side-nav-logOut").addEventListener('click', function(e){
+        e.preventDefault();
+        signOutFirebase()
+    });
+    document.getElementById('file-first').addEventListener('change', handleFileSelect1, false);
+
+    document.getElementById('file-second').addEventListener('change', handleFileSelect2, false);
+
+    document.getElementById('file-third').addEventListener('change', handleFileSelect3, false);
+
     let userId = "";
 
     firebase.auth().onAuthStateChanged(firebaseUser => {
         if(firebaseUser) {
+            console.log('Anonymous user signed-in.');
             console.log(firebaseUser.uid);
             userId = firebaseUser.uid;
+            document.getElementById('side-nav-login').style.display = 'none';
+            document.getElementById('side-nav-register').style.display = 'none';
+            document.getElementById('side-nav-logOut').style.display = 'block';
+            document.getElementById('side-nav-logOut').style.display = 'block';
+            document.getElementById('side-nav-profile').style.display = 'block';
         } else {
             console.log('not logged in');
+            document.getElementById('side-nav-login').style.display = 'block';
+            document.getElementById('side-nav-register').style.display = 'block';
+            document.getElementById('side-nav-logOut').style.display = 'none';
+            document.getElementById('side-nav-profile').style.display = 'none';
+            console.log('There was no anonymous session. Creating a new anonymous user.');
+            // Sign the user in anonymously since accessing Storage requires the user to be authorized.
+            auth.signInAnonymously().catch(function(error) {
+            if (error.code === 'auth/operation-not-allowed') {
+                window.alert('Anonymous Sign-in failed. Please make sure that you have enabled anonymous ' +
+                    'sign-in on your Firebase project.');
+            }
+            });
+            //als er niet is ingelogd, dan wordt je automatisch naar de homepagina gebracht
+            setTimeout('window.location.href="/"', 0)
         }
     });
     
     //if the login button is clicked
     document.getElementById("btn-addKot-submit").addEventListener('click', function(e){
         e.preventDefault();
-        newKotToDatabase();
+        console.log(userId);
+        newKotToDatabase(userId);
     });
-
-    //functie die nieuwe koten gaat wegschrijven in de database
-    function newKotToDatabase(){
-        // Create a new kot reference with an auto-generated id
-        // Get a key for a new Post.
-        let kotId = firebase.database().ref().child('koten').push().key;
-
-        let price = document.getElementById('register-kot-price').value;
-        let extraInfo = document.getElementById('register-kot-info').value;
-        let type = document.getElementById('register-kot-type').value;
-        let oppervlakte = document.getElementById('register-kot-oppervlakte').value;
-        let verdieping = document.getElementById('register-kot-floor').value;
-        let maxPersons = document.getElementById('register-kot-maxPersons').value;
-        let kotenInPand = document.getElementById('register-kot-kotAmount').value;
-        let douche = document.getElementById('register-kot-douche').value;
-        let bad = document.getElementById('register-kot-bad').value;
-        let toilet = document.getElementById('register-kot-toilet').value;
-        let keuken = document.getElementById('register-kot-keuken').value;
-        let bemeubeld = document.getElementById('register-kot-bemeubeld').value;
-        let street = document.getElementById('register-kot-street').value;
-        let extra = document.getElementById('register-kot-extra').value;
-        let place = document.getElementById('register-kot-place').value;
-
-        let lattitude = "test";
-        let longitude = "test";
-        
-
-
-        writeKotData(kotId, place, street, extra, lattitude, longitude, price, extraInfo, type, oppervlakte, verdieping, maxPersons, kotenInPand, douche, bad, toilet, keuken, bemeubeld);
-    };
-
-    //functie die koten gaaat opslaan in de database
-    function writeKotData(kotId, place, street, extra, lattitude, longitude, price, extraInfo, type, oppervlakte, verdieping, maxPersons, kotenInPand, douche, bad, toilet, keuken, bemeubeld) {
-        // Get a reference to the database service
-        const database = firebase.database();
-        database.ref('koten/' + kotId).set({
-            "kotbaas" : userId ,
-            "adress" : {
-                "city" : place ,
-                "street" : street ,
-                "extra" : extra ,
-                "coordinates" : {
-                    "lattitude" : lattitude ,
-                    "longitude" : longitude ,
-                },
-            },
-            "info" : {
-                "prijs" : price ,
-                "extraInfo" : extraInfo ,
-                "overzicht" : {
-                    "type" : type ,
-                    "oppervlakte" : oppervlakte ,
-                    "verdieping" : verdieping ,
-                    "maxPersonen" : maxPersons ,
-                    "kotenInPand" : kotenInPand ,
-                },
-                "interieur" : {
-                    "douche" : douche ,
-                    "bad" : bad ,
-                    "toilet" : toilet ,
-                    "keuken" : keuken ,
-                    'bemeubeld' : bemeubeld ,
-                }
-            }
-        });
-    }
 };

@@ -9,6 +9,9 @@
 // pages
 @import "./about"
 @import "./profile"
+@import "./kotOverview"
+@import "./kotDetail"
+@import "./addKot"
 
 // Generic styling
 html
@@ -48,12 +51,14 @@ body
             width: 100%
             height: 35px
             margin-bottom: 20px
-        h3
-            color: $base-color
-            background-color: $sec-light-color
-            padding: 10px
-            font-size: 1,375rem
-            font-weight: $base-font-weight
+        .invisible
+            display: none
+    h3
+        color: $base-color
+        background-color: $sec-light-color
+        padding: 10px
+        font-size: 1,375rem
+        font-weight: $base-font-weight
     /* .addKot
         form
             label
@@ -65,14 +70,14 @@ body
                 float: right
                 width: auto */
                 
-.btn-basic
-    height: 40px
-    background-color: $btn-background-color
-    font-weight: $base-font-weight
-    font-size: 2rem
-    color: $base-color
-    width: 100%
-    border: none
-    border-radius: 5px
-.invisible
-    display: none
+    .btn-basic
+        height: 40px
+        background-color: $btn-background-color
+        font-weight: $base-font-weight
+        font-size: 2rem
+        color: $base-color
+        width: 100%
+        border: none
+        border-radius: 5px
+    .invisible
+        display: none

@@ -1,5 +1,17 @@
-<nav class="header main-nav">
-    <a href="/" data-navigo>student@kot</a>
-    <i class="fas fa-bars"></i>
-    <a href="#/login" class="login">Login</a>
+<header class="header">
+    <nav class="main-nav">
+        <a href="/" data-navigo>student@kot</a>
+        <i class="fas fa-bars" id="sideNav-open"></i>
+        <a href="#/login" class="login invisible" id="login-button">Login</a>
+    </nav>
+</header>
+<nav class="side-nav invisible">
+    <i class="fas fa-times" id="sideNav-close"></i>
+    <a href="#/login" data-navigo id="side-nav-login" class="invisible">Login</a>
+    <a href="/" data-navigo id="side-nav-register" class="invisible">Registreren</a>
+    <a href="#/profile" data-navigo id="side-nav-profile" class="invisible">Profiel bewerken</a>
+    <a href="#/addKot" data-navigo id="side-nav-addKot" class="invisible">Kot toevoegen</a>
+    <a href="#/about" data-navigo>Over ons</a>
+    <a href="/" data-navigo>Contact</a>
+    <button id="side-nav-logOut" class="invisible">Uitloggen</button>
 </nav>

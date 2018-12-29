@@ -1,12 +1,7 @@
 // Only import the compile function from handlebars instead of the entire library
 import { compile } from 'handlebars';
 import update from '../helpers/update';
-
-
-const { getInstance } = require('../firebase/firebase');
-
-const firebase = getInstance();
-
+import {signOutFirebase, handleSignUp, firebase} from '../helpers/functies';
 
 // Import the template to use
 const homeTemplate = require('../templates/home.handlebars');
@@ -16,18 +11,36 @@ export default () => {
   const appName = 'Student@kot';
   // Return the compiled template to the router
   update(compile(homeTemplate)({ appName }));
+  let entity = "leeg";
 
 
   //if the register button is clicked
   document.getElementById("btn-register-start-submit").addEventListener('click', function(e){
     e.preventDefault();
-    handleSignUp()
+    handleSignUp(entity)
   });
 
   //if the logout button is clicked
   document.getElementById("btn-register-start-logout").addEventListener('click', function(e){
     e.preventDefault();
     signOutFirebase()
+  });
+
+  //if the logout button is clicked
+  document.getElementById("side-nav-logOut").addEventListener('click', function(e){
+    e.preventDefault();
+    signOutFirebase()
+  });
+  
+
+  //functie om de nav te laten werken
+  document.getElementById("sideNav-open").addEventListener('click', function(){
+    let element = document.getElementsByClassName("side-nav")[0];
+    element.classList.toggle("invisible");
+  });
+  document.getElementById("sideNav-close").addEventListener('click', function(){
+    let element = document.getElementsByClassName("side-nav")[0];
+    element.classList.toggle("invisible");
   });
 
   const homeMain = document.getElementById('home-section-main');
@@ -38,7 +51,6 @@ export default () => {
   const btnRegStu = document.getElementById('btn-register-start-student');
   const btnRegStart = document.getElementById('btn-register-start');
   const hsLabel2 = document.getElementById('register-hogeschoolChoice');
-  let entity = "leeg";
 
   btnRegStart.onclick = function () {
     homeMain.style.display = 'none';
@@ -68,12 +80,25 @@ export default () => {
       homeRegister.style.display = 'none';
       homeEntity.style.display = 'none';
       homeBtnLogout.style.display = 'block';
+      document.getElementsByClassName("login")[0].style.display = 'none';
+      document.getElementById('side-nav-login').style.display = 'none';
+      document.getElementById('side-nav-register').style.display = 'none';
+      document.getElementById('side-nav-logOut').style.display = 'block';
+      document.getElementById('side-nav-logOut').style.display = 'block';
+      document.getElementById('side-nav-profile').style.display = 'block';
+      //als er is ingelogd, dan wordt je automatisch naar de kotview pagina gebracht
+      setTimeout('window.location.href="/#/kotView"', 0)
     } else {
       console.log('not logged in');
       homeMain.style.display = 'block';
       homeRegister.style.display = 'none';
       homeEntity.style.display = 'none';
       homeBtnLogout.style.display = 'none';
+      document.getElementsByClassName("login")[0].style.display = 'block';
+      document.getElementById('side-nav-login').style.display = 'block';
+      document.getElementById('side-nav-register').style.display = 'block';
+      document.getElementById('side-nav-logOut').style.display = 'none';
+      document.getElementById('side-nav-profile').style.display = 'none';
     }
   });
 
@@ -82,63 +107,6 @@ export default () => {
     //==================     functions     ===================
     //========================================================
   
-
-  //Handles the sign up button press.
-  function handleSignUp() {
-    let place = document.getElementById('register-place').value;
-    let lattitude = "test";
-    let longitude = "test";
-    let street = document.getElementById('register-street').value;
-    let extra = document.getElementById('register-extra').value;
-    let firstName = document.getElementById('register-firstname').value;
-    let lastName = document.getElementById('register-lastname').value;
-    let hogeschool = document.getElementById('register-hogeschoolChoice').value;
-    let phone = document.getElementById('register-phone').value;
-    let email = document.getElementById('register-email').value;
-    let password = document.getElementById('register-password').value;
-    let passwordConfirm = document.getElementById('register-passwordConfirm').value;
-    if (email.length < 4) {
-        alert('Vul een geldig emailadres in!');
-        return;
-    }
-    if (password.length < 4) {
-        alert('Vul een wachtwoord in!');
-        return;
-    }
-    if (password !== passwordConfirm){
-      alert('De wachtswoorden zijn niet gelijk!');
-        return;
-    }
-    // Sign in with email and pass.
-    // [START createwithemail]
-    firebase.auth().createUserWithEmailAndPassword(email, password).then(function(data){
-      console.log('uid',data.user.uid);
-      writeUserData(data.user.uid, place, lattitude, longitude, street, extra, entity, firstName, lastName, hogeschool, phone);
-    
-      //Here if you want you can sign in the user
-    }).catch(function(error) {
-        // Handle Errors here.
-        let errorCode = error.code;
-        let errorMessage = error.message;
-        // [START_EXCLUDE]
-        if (errorCode == 'auth/weak-password') {
-            alert('The password is too weak.');
-        } else {
-            alert(errorMessage);
-        }
-        console.log(error);
-        // [END_EXCLUDE]
-    });
-  }
-
-  //function to sign out the current user
-  function signOutFirebase() {
-    firebase.auth().signOut().then(function() {
-      // Sign-out successful.
-    }).catch(function(error) {
-      // An error happened.
-    });
-  };
 
   // Sends an email verification to the user.
   function sendEmailVerification() {
@@ -151,26 +119,4 @@ export default () => {
     });
     // [END sendemailverification]
   };
-
-  //functie die de overige data in een object plaatst, en deze in de firebase database gaat opslaan
-  function writeUserData(userId, place, lattitude, longitude, street, extra, entity, firstName, lastName, hogeschool, phone) {
-    // Get a reference to the database service
-    const database = firebase.database();
-    database.ref('users/' + userId).set({
-      "adress" : {
-        "city" : place ,
-        "street" : street ,
-        "extra" : extra ,
-        "coordinates" : {
-          "lattitude" : lattitude ,
-          "longitude" : longitude ,
-        },        
-      },
-      "entity" : entity ,
-      "firstName" : firstName ,
-      "lastName" : lastName ,
-      "hogeschool" : hogeschool ,
-      "phone" : phone
-    });
-  }
 };
