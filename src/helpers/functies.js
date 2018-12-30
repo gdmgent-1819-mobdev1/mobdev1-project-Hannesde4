@@ -459,10 +459,6 @@ const userExistsCallback = (chatId, exists) => {
     }
 }
 
-function test(chatId){
-    console.log('dit werkt'+ chatId);
-}
-
 const newConversationToDatabase = (chatId, currentUser) => {
     let date = new Date();
     let sendDate = date.toTimeString();
