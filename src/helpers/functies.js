@@ -8,11 +8,11 @@ const storageRef = firebase.storage().ref();
 // Get a reference to the database service
 const database = firebase.database();
 
-//function to sign out the current user
-function signOutFirebase() {
-    auth.signOut().then(function() {
+//functie to sign out the current user
+const signOutFirebase = () => {
+    auth.signOut().then(() => {
       // Sign-out successful.
-    }).catch(function(error) {
+    }).catch((error) => {
       // An error happened.
     });
     //localstorage wordt gewist
@@ -21,8 +21,34 @@ function signOutFirebase() {
     setTimeout('window.location.href="/"', 0);
 };
 
+//function to sign in a user
+const signInFirebase = () => {
+    let email = document.getElementById('email-login').value;
+    let password = document.getElementById('password-login').value;
+
+    // Handles the sign in with email and password
+    firebase.auth().signInWithEmailAndPassword(email, password).catch((error) => {
+      // Handle Errors here.
+      let errorCode = error.code;
+      let errorMessage = error.message;
+      // ...
+    });
+};
+
+// Sends an email verification to the user.
+const sendEmailVerification = () => {
+    // [START sendemailverification]
+    firebase.auth().currentUser.sendEmailVerification().then(() => {
+      // Email Verification sent!
+      // [START_EXCLUDE]
+      alert('Email Verification Sent!');
+      // [END_EXCLUDE]
+    });
+    // [END sendemailverification]
+};
+
 //Handles the sign up button press.
-function handleSignUp(entity) {
+const handleSignUp = (entity) => {
     let place = document.getElementById('register-place').value;
     let lattitude = "test";
     let longitude = "test";
@@ -49,12 +75,12 @@ function handleSignUp(entity) {
     }
     // Sign in with email and pass.
     // [START createwithemail]
-    auth.createUserWithEmailAndPassword(email, password).then(function(data){
+    auth.createUserWithEmailAndPassword(email, password).then((data) => {
       console.log('uid',data.user.uid);
       writeUserData(data.user.uid, place, lattitude, longitude, street, extra, entity, firstName, lastName, hogeschool, phone);
     
       //Here if you want you can sign in the user
-    }).catch(function(error) {
+    }).catch((error) => {
         // Handle Errors here.
         let errorCode = error.code;
         let errorMessage = error.message;
@@ -70,8 +96,9 @@ function handleSignUp(entity) {
     getAllKoten();
 };
 
+
 //functie die de overige data in een object plaatst, en deze in de firebase database gaat opslaan
-function writeUserData(userId, place, lattitude, longitude, street, extra, entity, firstName, lastName, hogeschool, phone) {
+const writeUserData = (userId, place, lattitude, longitude, street, extra, entity, firstName, lastName, hogeschool, phone) => {
     console.log(userId);
     database.ref('users/' + userId).set({
       "adress" : {
@@ -89,25 +116,25 @@ function writeUserData(userId, place, lattitude, longitude, street, extra, entit
       "hogeschool" : hogeschool ,
       "phone" : phone
     });
-  }
+};
 
-  //functie die de gegevens van de huidige ingelogde gebruiker gaat opvragen
-  let myEntity = "";
-  function getCurUserFromDatabase(uid){
+//functie die de gegevens van de huidige ingelogde gebruiker gaat opvragen
+let myEntity = "";
+const getCurUserFromDatabase = (uid) => {
     console.log(uid);
     const ref = database.ref('users/' + uid);
     console.log(ref );
-    ref.on('value', function(snapshot) {
+    ref.on('value', (snapshot) => {
         console.log(snapshot.val());
         const data = snapshot.val();
         console.log(data);
         profileChangeValues(data.adress.city, data.adress.street, data.adress.extra, data.firstName, data.lastName, data.hogeschool, data.phone)
         myEntity = data.entity;
     });
-}
+};
 
 //functie die het profiel gaat updaten als er de nieuwe gegevens worden opgeslagen
-function profileChangeValues(place, street, extra, firstname, lastname, highschool, phone){
+const profileChangeValues = (place, street, extra, firstname, lastname, highschool, phone) => {
     document.getElementById('place').value = place;
     document.getElementById('street').value = street;
     document.getElementById('extra').value = extra;
@@ -117,7 +144,7 @@ function profileChangeValues(place, street, extra, firstname, lastname, highscho
     document.getElementById('phone').value = phone;
 };
 
-function updateUser(place, street, extra, lattitude, longitude, firstName, lastName, highschool, phone, userId) {
+const updateUser = (place, street, extra, lattitude, longitude, firstName, lastName, highschool, phone, userId) => {
     // A post entry.
     let postData = {
         "adress" : {
@@ -140,19 +167,28 @@ function updateUser(place, street, extra, lattitude, longitude, firstName, lastN
     updates['users/' + userId] = postData;
   
     return firebase.database().ref().update(updates);
-}
+};
 
-function generateAndStoreKotId(){
+const generateAndStoreKotId = () => {
     if (!(localStorage['kotIdGenerate'])){
         let kotId = firebase.database().ref().child('koten').push().key;
         localStorage['kotIdGenerate'] = kotId;
     } else {
         console.log('er is al een kot-id');
     }
-}
+};
+
+const generateAndStoreMessageId = () => {
+    if (!(localStorage['messageId'])){
+        let messageId = firebase.database().ref().child('conversations/chatInfo').push().key;
+        localStorage['messageId'] = messageId;
+    } else {
+        console.log('er is al een message-id');
+    }
+};
 
 //functie die nieuwe koten gaat wegschrijven in de database
-function newKotToDatabase(userId){
+const newKotToDatabase = (userId) => {
     // Create a new kot reference with an auto-generated id
     let price = document.getElementById('register-kot-price').value;
     let extraInfo = document.getElementById('register-kot-info').value;
@@ -173,14 +209,15 @@ function newKotToDatabase(userId){
     let lattitude = "test";
     let longitude = "test";
     
-
-
+    //gaat effectief de data verwerken naar firebase
     writeKotData(localStorage['kotIdGenerate'], place, street, extra, lattitude, longitude, price, extraInfo, type, oppervlakte, verdieping, maxPersons, kotenInPand, douche, bad, toilet, keuken, bemeubeld, userId);
+    //na het opslaan wordt er een nieuwe kotKey gegenereerd
     generateAndStoreKotId();
+    setTimeout('window.location.href="/"', 0)
 };
 
 //functie die koten gaaat opslaan in de database
-function writeKotData(kotId, place, street, extra, lattitude, longitude, price, extraInfo, type, oppervlakte, verdieping, maxPersons, kotenInPand, douche, bad, toilet, keuken, bemeubeld, userId) {
+const writeKotData = (kotId, place, street, extra, lattitude, longitude, price, extraInfo, type, oppervlakte, verdieping, maxPersons, kotenInPand, douche, bad, toilet, keuken, bemeubeld, userId) => {
     // Get a reference to the database service
     let foto = [];
     if (localStorage['kot-image-first'] !== 'undefind'){
@@ -194,7 +231,6 @@ function writeKotData(kotId, place, street, extra, lattitude, longitude, price, 
         foto.push(localStorage['kot-image-third']);
     };
     console.log(foto);
-    const database = firebase.database();
     database.ref('koten/' + kotId).set({
         "kotbaas" : userId ,
         "adress" : {
@@ -230,9 +266,9 @@ function writeKotData(kotId, place, street, extra, lattitude, longitude, price, 
     localStorage.removeItem('kot-image-first');
     localStorage.removeItem('kot-image-second');
     localStorage.removeItem('kot-image-third');
-}
+};
 
-function handleFileSelect1(evt) {
+const handleFileSelect1 = (evt) => {
     console.log(evt);
     evt.stopPropagation();
     evt.preventDefault();
@@ -245,9 +281,9 @@ function handleFileSelect1(evt) {
       },
     };
     fileUpload(file, metadata, 'kot-image-first');
-}
+};
 
-function handleFileSelect2(evt) {
+const handleFileSelect2 = (evt) => {
     console.log(evt);
     evt.stopPropagation();
     evt.preventDefault();
@@ -260,9 +296,9 @@ function handleFileSelect2(evt) {
       },
     };
     fileUpload(file, metadata, 'kot-image-second');
-}
+};
 
-function handleFileSelect3(evt) {
+const handleFileSelect3 = (evt) => {
     console.log(evt);
     evt.stopPropagation();
     evt.preventDefault();
@@ -275,16 +311,16 @@ function handleFileSelect3(evt) {
       },
     };
     fileUpload(file, metadata, 'kot-image-third');
-}
+};
 
-function fileUpload(file, metadata, box){
+const fileUpload = (file, metadata, box) => {
     // Push to child path.
     // [START oncomplete]
-    storageRef.child('kot_images/' + localStorage['kotIdGenerate'] + '/' + file.name).put(file, metadata).then(function(snapshot) {
+    storageRef.child('kot_images/' + localStorage['kotIdGenerate'] + '/' + file.name).put(file, metadata).then((snapshot) => {
         console.log('Uploaded', snapshot.totalBytes, 'bytes.');
         console.log('File metadata:', snapshot.metadata);
         // Let's get a download URL for the file.
-        snapshot.ref.getDownloadURL().then(function(url) {
+        snapshot.ref.getDownloadURL().then((url) => {
           console.log('File available at', url);
           // [START_EXCLUDE]
           document.getElementById(box).innerHTML = "";
@@ -294,22 +330,22 @@ function fileUpload(file, metadata, box){
 //          document.getElementById(box).innerHTML = '<img src="' +  url + '">';
           // [END_EXCLUDE]
         });
-      }).catch(function(error) {
+      }).catch((error) => {
         // [START onfailure]
         console.error('Upload failed:', error);
         // [END onfailure]
       });
       // [END oncomplete]
-}
+};
 
-function getAllKoten(){
+const getAllKoten = () => {
     const ref = database.ref('koten/');
-    ref.on("value", function(snapshot) {
+    ref.on("value", (snapshot) => {
         //maakt een array waarin ik elke kot-key ga opslaan
         let keys = [];
         //counter om te tellen hoeveel keys er zijn
         let i = 0;
-        snapshot.forEach(function(childSnapshot) {
+        snapshot.forEach((childSnapshot) => {
             let childKey = childSnapshot.key;
             let childData = childSnapshot.val();
             //elk kot wordt opgeslagen als string op met zijn key in de localstorage
@@ -324,9 +360,9 @@ function getAllKoten(){
     });
     //functie die de koten gaat laden uit localstorage
     loadKotenFromLocStor();
-}
+};
 
-function loadKotenFromLocStor(){
+const loadKotenFromLocStor = () => {
     //var die de string met al mijn kotKeys gaat inladen
     let kotKeysString = localStorage.getItem('kotKeys');
     //var die de string met keys omzet naar array
@@ -334,18 +370,120 @@ function loadKotenFromLocStor(){
     //het element kotOverview uit mijn overzichtpagina in een var steken
     const koten = document.getElementById('kotOverviewAll');
     //voor elke key dat er in kotKeys zit wordt onderstaande dingen overlopen
-    kotKeys.forEach(function(key) {
+    kotKeys.forEach((key) => {
         //gaat de string uit localstorage omzetten in een object en in een var steken
         let kot = JSON.parse(localStorage[key]);
         //gaat per kot een div aanmaken en aan de html toevoegen
         let fotoArray = kot.foto.split(',');
-        koten.innerHTML += '<div class="kotOverview" id="' + key + '"><span class="price">' + kot.info.prijs + '</span></div>';
+        koten.innerHTML += '<div class="kotOverview uniqueKot" id="' + key + '"><span class="price">' + kot.info.prijs + '</span></div>';
         document.getElementById(key).style.backgroundImage = "url('" + fotoArray[0] + "')";
     });
+};
+
+const loadCurrentKot = () => {
+    const image1 = document.getElementById('kotDetail-image1');
+    const image2 = document.getElementById('kotDetail-image2');
+    const image3 = document.getElementById('kotDetail-image3');
+    const price = document.getElementById('kotDetail-price-value');
+    const info = document.getElementById('kotDetail-info-value');
+    const type = document.getElementById('kotDetail-studio-type-value');
+    const oppervlakte = document.getElementById('kotDetail-oppervlakte-value');
+    const verdieping = document.getElementById('kotDetail-verdieping-value');
+    const maxPersons = document.getElementById('kotDetail-maxPersonen-value');
+    const kotenInPand = document.getElementById('kotDetail-kotenInPand-value');
+    const douche = document.getElementById('kotDetail-douche-value');
+    const bad = document.getElementById('kotDetail-bad-value');
+    const toilet = document.getElementById('kotDetail-toilet-value');
+    const keuken = document.getElementById('kotDetail-keuken-value');
+    const bemeubeld = document.getElementById('kotDetail-bemeubeld-value');
+    let currentKot = localStorage['kotInDetail'];
+    let kot = JSON.parse(localStorage[currentKot]);
+    let fotoArray = kot.foto.split(',');
+    image1.style.backgroundImage = "url('" + fotoArray[0] + "')";
+    image2.style.backgroundImage = "url('" + fotoArray[1] + "')";
+    image3.style.backgroundImage = "url('" + fotoArray[2] + "')";
+    price.innerHTML = '€' + kot.info.prijs
+    info.innerHTML = kot.info.extraInfo;
+    type.innerHTML = kot.info.overzicht.type;
+    oppervlakte.innerHTML = kot.info.overzicht.oppervlakte + 'm2';
+    verdieping.innerHTML = kot.info.overzicht.verdieping;
+    maxPersons.innerHTML = kot.info.overzicht.maxPersonen;
+    kotenInPand.innerHTML = kot.info.overzicht.kotenInPand;
+    douche.innerHTML = kot.info.interieur.douche;
+    bad.innerHTML = kot.info.interieur.bad;
+    toilet.innerHTML = kot.info.interieur.toilet;
+    keuken.innerHTML = kot.info.interieur.keuken;
+    bemeubeld.innerHTML = kot.info.interieur.bemeubeld;
+};
+
+const sendMessage = () => {
+    console.log('message sent!');
+    startConversation();
+};
+
+const startConversation = () => {
+    let currentKot = localStorage['kotInDetail'];
+    let kot = JSON.parse(localStorage[currentKot]);
+    let studentId = firebase.auth().currentUser.uid;
+    let kotbaasId = kot.kotbaas;
+    //create chatId with studentId and kotbaasId
+    let chatId = studentId + "+" + kotbaasId;
+    checkIfConversationExist(chatId);
+    if(localStorage['chatExist'] == true){
+        newConversationToDatabase(chatId, studentId);
+    } else {
+        database.ref('conversations/chatInfo/' + chatId).set({
+            "student" : 'student' ,
+            "kotbaas" : 'kotbaas' ,
+            "kotId" : 'kotId' ,
+        });
+        newConversationToDatabase(chatId, studentId);
+    }
+};
+
+const checkIfConversationExist = (chatId) => {
+    let ref = database.ref('conversations/chatInfo/');
+    ref.child(chatId).once('value', function(snapshot) {
+        let exists = (snapshot.val() !== null);
+        userExistsCallback(chatId, exists);
+    });
+};
+
+const userExistsCallback = (chatId, exists) => {
+    if (exists) {
+        console.log('chat ' + chatId + ' exists!');
+        localStorage['chatExist'] = true;
+    } else {
+        console.log('chat ' + chatId + ' does not exist!');
+        localStorage['chatEist'] = false;
+    }
 }
+
+function test(chatId){
+    console.log('dit werkt'+ chatId);
+}
+
+const newConversationToDatabase = (chatId, currentUser) => {
+    let date = new Date();
+    let sendDate = date.toTimeString();
+    console.log(date);
+    let message = 'Dit is een testbericht';
+    database.ref('conversations/messages/' + chatId).once('value', function (snap) {
+        console.log('‘user’', snap.numChildren());
+        let i = snap.numChildren();
+        let messageId = "m"+ i;
+        console.log(messageId);
+        database.ref('conversations/messages/' + chatId + '/' + messageId).set({
+            "from" : currentUser ,
+            "date" : sendDate ,
+            "message" : message ,
+        });
+    });
+};
 
 export {
     signOutFirebase,
+    signInFirebase,
     handleSignUp,
     getCurUserFromDatabase,
     updateUser,
@@ -357,4 +495,6 @@ export {
     generateAndStoreKotId,
     getAllKoten,
     auth,
+    sendMessage,
+    loadCurrentKot,
 };

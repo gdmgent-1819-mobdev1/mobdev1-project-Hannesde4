@@ -10,13 +10,11 @@ const kotOveviewTemplate = require('../templates/kotOverview.handlebars');
 export default () => {
     // Return the compiled template to the router
     update(compile(kotOveviewTemplate)({  }));
-    getAllKoten();
 
     //eventlistener, als er geklikt wordt op een element binnen mijn ol
-    document.getElementById("kotOverviewAll").addEventListener("click", function(e) {
-        console.log('test');
+    document.getElementById('kotOverviewAll').addEventListener('click', (e) => {
         //er wordt gekeken of er geklikt is op een i-element
-        if(e.target && e.target.nodeName == "DIV"){
+        if(e.target && e.target.nodeName == 'DIV' && e.target.classList[1] == 'uniqueKot'){
             let key = e.target.id;
             console.log(key);
             localStorage['kotInDetail'] = key;
@@ -25,32 +23,40 @@ export default () => {
     })
 
     //functie om de nav te laten werken
-    document.getElementById("sideNav-open").addEventListener('click', function(){
-        let element = document.getElementsByClassName("side-nav")[0];
+    let element = document.getElementsByClassName("side-nav")[0];
+    document.getElementById("sideNav-open").addEventListener('click', () => {
         element.classList.toggle("invisible");
     });
-    document.getElementById("sideNav-close").addEventListener('click', function(){
-        let element = document.getElementsByClassName("side-nav")[0];
+    document.getElementById("sideNav-close").addEventListener('click', () => {
         element.classList.toggle("invisible");
     });
 
     //if the logout button is clicked
-    document.getElementById("side-nav-logOut").addEventListener('click', function(e){
+    document.getElementById("side-nav-logOut").addEventListener('click', (e) => {
         e.preventDefault();
         signOutFirebase()
     });
 
-    document.getElementById("list-view-icon-list").addEventListener('click', function(e){
+    let fire = document.getElementById('list-view-icon-fire');
+    let list = document.getElementById("list-view-icon-list");
+    let blok = document.getElementById("list-view-icon-blok");
+    let kotOverview =  document.getElementById('kotOverviewAll');
+    list.addEventListener('click', (e) => {
         e.preventDefault();
-        document.getElementById('kotOverview').classList.toggle('list-view');
-        document.getElementById("list-view-icon-list").classList.toggle('invisible');
-        document.getElementById("list-view-icon-blok").classList.toggle('invisible');
+        kotOverview.classList.toggle('list-view');
+        list.classList.toggle('invisible');
+        blok.classList.toggle('invisible');
     });
-    document.getElementById("list-view-icon-blok").addEventListener('click', function(e){
+    blok.addEventListener('click', (e) => {
         e.preventDefault();
-        document.getElementById('kotOverview').classList.toggle('list-view');
-        document.getElementById("list-view-icon-list").classList.toggle('invisible');
-        document.getElementById("list-view-icon-blok").classList.toggle('invisible');
+        kotOverview.classList.toggle('list-view');
+        list.classList.toggle('invisible');
+        blok.classList.toggle('invisible');
+    });
+    fire.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('fire');
+        alert('fire!!!');
     });
 
      //checks if a user is logged in, and answers in the console
@@ -74,4 +80,5 @@ export default () => {
       setTimeout('window.location.href="/"', 0)
     }
   });
+  getAllKoten();
 };

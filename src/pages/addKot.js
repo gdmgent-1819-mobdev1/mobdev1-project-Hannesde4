@@ -24,17 +24,17 @@ export default () => {
     console.log(generateAndStoreKotId());
 
     //functie om de nav te laten werken
-    document.getElementById("sideNav-open").addEventListener('click', function(){
+    document.getElementById("sideNav-open").addEventListener('click', () => {
         let element = document.getElementsByClassName("side-nav")[0];
         element.classList.toggle("invisible");
     });
-    document.getElementById("sideNav-close").addEventListener('click', function(){
+    document.getElementById("sideNav-close").addEventListener('click', () => {
         let element = document.getElementsByClassName("side-nav")[0];
         element.classList.toggle("invisible");
     });
 
     //if the logout button is clicked
-    document.getElementById("side-nav-logOut").addEventListener('click', function(e){
+    document.getElementById("side-nav-logOut").addEventListener('click', (e) => {
         e.preventDefault();
         signOutFirebase()
     });
@@ -64,7 +64,7 @@ export default () => {
             document.getElementById('side-nav-profile').style.display = 'none';
             console.log('There was no anonymous session. Creating a new anonymous user.');
             // Sign the user in anonymously since accessing Storage requires the user to be authorized.
-            auth.signInAnonymously().catch(function(error) {
+            auth.signInAnonymously().catch((error) => {
             if (error.code === 'auth/operation-not-allowed') {
                 window.alert('Anonymous Sign-in failed. Please make sure that you have enabled anonymous ' +
                     'sign-in on your Firebase project.');
@@ -76,7 +76,7 @@ export default () => {
     });
     
     //if the login button is clicked
-    document.getElementById("btn-addKot-submit").addEventListener('click', function(e){
+    document.getElementById("btn-addKot-submit").addEventListener('click', (e) => {
         e.preventDefault();
         console.log(userId);
         newKotToDatabase(userId);

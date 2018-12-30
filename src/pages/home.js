@@ -15,30 +15,30 @@ export default () => {
 
 
   //if the register button is clicked
-  document.getElementById("btn-register-start-submit").addEventListener('click', function(e){
+  document.getElementById("btn-register-start-submit").addEventListener('click', (e) => {
     e.preventDefault();
     handleSignUp(entity)
   });
 
   //if the logout button is clicked
-  document.getElementById("btn-register-start-logout").addEventListener('click', function(e){
+  document.getElementById("btn-register-start-logout").addEventListener('click', (e) => {
     e.preventDefault();
     signOutFirebase()
   });
 
   //if the logout button is clicked
-  document.getElementById("side-nav-logOut").addEventListener('click', function(e){
+  document.getElementById("side-nav-logOut").addEventListener('click', (e) => {
     e.preventDefault();
     signOutFirebase()
   });
   
 
   //functie om de nav te laten werken
-  document.getElementById("sideNav-open").addEventListener('click', function(){
+  document.getElementById("sideNav-open").addEventListener('click', () => {
     let element = document.getElementsByClassName("side-nav")[0];
     element.classList.toggle("invisible");
   });
-  document.getElementById("sideNav-close").addEventListener('click', function(){
+  document.getElementById("sideNav-close").addEventListener('click', () => {
     let element = document.getElementsByClassName("side-nav")[0];
     element.classList.toggle("invisible");
   });
@@ -52,18 +52,18 @@ export default () => {
   const btnRegStart = document.getElementById('btn-register-start');
   const hsLabel2 = document.getElementById('register-hogeschoolChoice');
 
-  btnRegStart.onclick = function () {
+  btnRegStart.onclick = () => {
     homeMain.style.display = 'none';
     homeEntity.style.display = 'block';
   };
-  btnRegStu.onclick = function () {
+  btnRegStu.onclick = () => {
     entity = "student";
     console.log(entity);
     homeEntity.style.display = 'none';
     homeRegister.style.display = 'block';
     hsLabel2.style.display = "block";
   };
-  btnRegKot.onclick = function () {
+  btnRegKot.onclick = () => {
     entity = "kotbaas";
     console.log(entity);
     homeEntity.style.display = 'none';
@@ -101,22 +101,4 @@ export default () => {
       document.getElementById('side-nav-profile').style.display = 'none';
     }
   });
-
-
-    //========================================================
-    //==================     functions     ===================
-    //========================================================
-  
-
-  // Sends an email verification to the user.
-  function sendEmailVerification() {
-    // [START sendemailverification]
-    firebase.auth().currentUser.sendEmailVerification().then(function() {
-      // Email Verification sent!
-      // [START_EXCLUDE]
-      alert('Email Verification Sent!');
-      // [END_EXCLUDE]
-    });
-    // [END sendemailverification]
-  };
 };

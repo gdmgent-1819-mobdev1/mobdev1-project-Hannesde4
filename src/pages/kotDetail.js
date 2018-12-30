@@ -1,7 +1,7 @@
 // Only import the compile function from handlebars instead of the entire library
 import { compile } from 'handlebars';
 import update from '../helpers/update';
-import {signOutFirebase, firebase, getCurrentKot} from '../helpers/functies';
+import {signOutFirebase, sendMessage, loadCurrentKot, firebase, getCurrentKot} from '../helpers/functies';
 
 
 // Import the template to use
@@ -10,6 +10,28 @@ const kotDetail = require('../templates/kotDetail.handlebars');
 export default () => {
     // Return the compiled template to the router
     update(compile(kotDetail)({  }));
+
+    //if the logout button is clicked
+    document.getElementById("side-nav-logOut").addEventListener('click', (e) => {
+        e.preventDefault();
+        signOutFirebase()
+    });
+
+    document.getElementById('btn-startConversation-submit').addEventListener('click', (e) => {
+        e.preventDefault();
+        sendMessage();
+    });
+    
+
+    //functie om de nav te laten werken
+    document.getElementById("sideNav-open").addEventListener('click', () => {
+        let element = document.getElementsByClassName("side-nav")[0];
+        element.classList.toggle("invisible");
+    });
+    document.getElementById("sideNav-close").addEventListener('click', () =>{
+        let element = document.getElementsByClassName("side-nav")[0];
+        element.classList.toggle("invisible");
+    });
 
     const image1 = document.getElementById('kotDetail-image1');
     const image2 = document.getElementById('kotDetail-image2');
@@ -31,25 +53,6 @@ export default () => {
         setTimeout('window.location.href="/"', 0)
         console.log('geen kot in storage');
     }else{
-        let currentKot = localStorage['kotInDetail'];
-        console.log(localStorage[currentKot]);
-        let kot = JSON.parse(localStorage[currentKot]);
-        console.log(kot);
-        let fotoArray = kot.foto.split(',');
-        image1.style.backgroundImage = "url('" + fotoArray[0] + "')";
-        image2.style.backgroundImage = "url('" + fotoArray[1] + "')";
-        image3.style.backgroundImage = "url('" + fotoArray[2] + "')";
-        price.innerHTML = '€' + kot.info.prijs
-        info.innerHTML = kot.info.extraInfo;
-        type.innerHTML = kot.info.overzicht.type;
-        oppervlakte.innerHTML = kot.info.overzicht.oppervlakte + 'm2';
-        verdieping.innerHTML = kot.info.overzicht.verdieping;
-        maxPersons.innerHTML = kot.info.overzicht.maxPersonen;
-        kotenInPand.innerHTML = kot.info.overzicht.kotenInPand;
-        douche.innerHTML = kot.info.interieur.douche;
-        bad.innerHTML = kot.info.interieur.bad;
-        toilet.innerHTML = kot.info.interieur.toilet;
-        keuken.innerHTML = kot.info.interieur.keuken;
-        bemeubeld.innerHTML = kot.info.interieur.bemeubeld;
+        loadCurrentKot();
     }
 }

@@ -1,7 +1,7 @@
 // Only import the compile function from handlebars instead of the entire library
 import { compile } from 'handlebars';
 import update from '../helpers/update';
-import {signOutFirebase, firebase} from '../helpers/functies';
+import {signOutFirebase, signInFirebase, firebase} from '../helpers/functies';
 
 
 // Import the template to use
@@ -30,38 +30,25 @@ export default () => {
   });
 
   //if the logout button is clicked
-  document.getElementById("side-nav-logOut").addEventListener('click', function(e){
+  document.getElementById("side-nav-logOut").addEventListener('click', (e) => {
     e.preventDefault();
     signOutFirebase()
   });
 
 
     //functie om de nav te laten werken
-    document.getElementById("sideNav-open").addEventListener('click', function(){
+    document.getElementById("sideNav-open").addEventListener('click', () => {
       let element = document.getElementsByClassName("side-nav")[0];
       element.classList.toggle("invisible");
     });
-    document.getElementById("sideNav-close").addEventListener('click', function(){
+    document.getElementById("sideNav-close").addEventListener('click', () => {
       let element = document.getElementsByClassName("side-nav")[0];
       element.classList.toggle("invisible");
     });
 
      //if the login button is clicked
-  document.getElementById("btn-login").addEventListener('click', function(e){
+  document.getElementById("btn-login").addEventListener('click', (e) => {
     e.preventDefault();
     signInFirebase();
   });
-  //function to sign in a user
-  function signInFirebase() {
-    let email = document.getElementById('email-login').value;
-    let password = document.getElementById('password-login').value;
-
-    // Handles the sign in with email and password
-    firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-      // Handle Errors here.
-      let errorCode = error.code;
-      let errorMessage = error.message;
-      // ...
-    });
-  };
 };

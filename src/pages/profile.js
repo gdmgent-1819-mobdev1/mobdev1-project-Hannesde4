@@ -13,17 +13,17 @@ export default () => {
     update(compile(profileTemplate)({  }));
 
     //functie om de nav te laten werken
-    document.getElementById("sideNav-open").addEventListener('click', function(){
+    document.getElementById("sideNav-open").addEventListener('click', () => {
         let element = document.getElementsByClassName("side-nav")[0];
         element.classList.toggle("invisible");
       });
-      document.getElementById("sideNav-close").addEventListener('click', function(){
+      document.getElementById("sideNav-close").addEventListener('click', () => {
         let element = document.getElementsByClassName("side-nav")[0];
         element.classList.toggle("invisible");
       });
 
     //if the logout button is clicked
-    document.getElementById("side-nav-logOut").addEventListener('click', function(e){
+    document.getElementById("side-nav-logOut").addEventListener('click', (e) => {
         e.preventDefault();
         signOutFirebase()
     });
@@ -47,7 +47,7 @@ export default () => {
       setTimeout('window.location.href="/"', 0)
     }
   });
-    document.getElementById('btn-profile-update-user-info').addEventListener('click', function(e){
+    document.getElementById('btn-profile-update-user-info').addEventListener('click', (e) => {
         e.preventDefault();
         let place = document.getElementById('place').value;
         let lattitude = "test";
