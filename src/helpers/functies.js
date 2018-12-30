@@ -380,42 +380,6 @@ const loadKotenFromLocStor = () => {
     });
 };
 
-const loadCurrentKot = () => {
-    const image1 = document.getElementById('kotDetail-image1');
-    const image2 = document.getElementById('kotDetail-image2');
-    const image3 = document.getElementById('kotDetail-image3');
-    const price = document.getElementById('kotDetail-price-value');
-    const info = document.getElementById('kotDetail-info-value');
-    const type = document.getElementById('kotDetail-studio-type-value');
-    const oppervlakte = document.getElementById('kotDetail-oppervlakte-value');
-    const verdieping = document.getElementById('kotDetail-verdieping-value');
-    const maxPersons = document.getElementById('kotDetail-maxPersonen-value');
-    const kotenInPand = document.getElementById('kotDetail-kotenInPand-value');
-    const douche = document.getElementById('kotDetail-douche-value');
-    const bad = document.getElementById('kotDetail-bad-value');
-    const toilet = document.getElementById('kotDetail-toilet-value');
-    const keuken = document.getElementById('kotDetail-keuken-value');
-    const bemeubeld = document.getElementById('kotDetail-bemeubeld-value');
-    let currentKot = localStorage['kotInDetail'];
-    let kot = JSON.parse(localStorage[currentKot]);
-    let fotoArray = kot.foto.split(',');
-    image1.style.backgroundImage = "url('" + fotoArray[0] + "')";
-    image2.style.backgroundImage = "url('" + fotoArray[1] + "')";
-    image3.style.backgroundImage = "url('" + fotoArray[2] + "')";
-    price.innerHTML = '€' + kot.info.prijs
-    info.innerHTML = kot.info.extraInfo;
-    type.innerHTML = kot.info.overzicht.type;
-    oppervlakte.innerHTML = kot.info.overzicht.oppervlakte + 'm2';
-    verdieping.innerHTML = kot.info.overzicht.verdieping;
-    maxPersons.innerHTML = kot.info.overzicht.maxPersonen;
-    kotenInPand.innerHTML = kot.info.overzicht.kotenInPand;
-    douche.innerHTML = kot.info.interieur.douche;
-    bad.innerHTML = kot.info.interieur.bad;
-    toilet.innerHTML = kot.info.interieur.toilet;
-    keuken.innerHTML = kot.info.interieur.keuken;
-    bemeubeld.innerHTML = kot.info.interieur.bemeubeld;
-};
-
 const sendMessage = () => {
     console.log('message sent!');
     startConversation();

@@ -28,23 +28,5 @@ export default () => {
         document.getElementById('side-nav-logOut').style.display = 'none';
         document.getElementById('side-nav-profile').style.display = 'none';
     }
-});
-
-
-  //functie om de nav te laten werken
-  document.getElementById("sideNav-open").addEventListener('click', () =>{
-    let element = document.getElementsByClassName("side-nav")[0];
-    element.classList.toggle("invisible");
   });
-  document.getElementById("sideNav-close").addEventListener('click', () =>{
-    let element = document.getElementsByClassName("side-nav")[0];
-    element.classList.toggle("invisible");
-  });
-
-  //if the logout button is clicked
-  document.getElementById("side-nav-logOut").addEventListener('click', (e) =>{
-    e.preventDefault();
-    signOutFirebase()
-  });
-
 };
