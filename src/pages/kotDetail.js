@@ -33,22 +33,6 @@ export default () => {
         element.classList.toggle("invisible");
     });
 
-    const image1 = document.getElementById('kotDetail-image1');
-    const image2 = document.getElementById('kotDetail-image2');
-    const image3 = document.getElementById('kotDetail-image3');
-    const price = document.getElementById('kotDetail-price-value');
-    const info = document.getElementById('kotDetail-info-value');
-    const type = document.getElementById('kotDetail-studio-type-value');
-    const oppervlakte = document.getElementById('kotDetail-oppervlakte-value');
-    const verdieping = document.getElementById('kotDetail-verdieping-value');
-    const maxPersons = document.getElementById('kotDetail-maxPersonen-value');
-    const kotenInPand = document.getElementById('kotDetail-kotenInPand-value');
-    const douche = document.getElementById('kotDetail-douche-value');
-    const bad = document.getElementById('kotDetail-bad-value');
-    const toilet = document.getElementById('kotDetail-toilet-value');
-    const keuken = document.getElementById('kotDetail-keuken-value');
-    const bemeubeld = document.getElementById('kotDetail-bemeubeld-value');
-
     if (localStorage['kotInDetail'] == undefined){
         setTimeout('window.location.href="/"', 0)
         console.log('geen kot in storage');
