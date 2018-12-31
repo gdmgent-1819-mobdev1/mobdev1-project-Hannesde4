@@ -37,28 +37,7 @@ export default () => {
         signOutFirebase()
     });
 
-    let fire = document.getElementById('list-view-icon-fire');
-    let list = document.getElementById("list-view-icon-list");
-    let blok = document.getElementById("list-view-icon-blok");
-    let kotOverview =  document.getElementById('kotOverviewAll');
-    list.addEventListener('click', (e) => {
-        e.preventDefault();
-        kotOverview.classList.toggle('list-view');
-        list.classList.toggle('invisible');
-        blok.classList.toggle('invisible');
-    });
-    blok.addEventListener('click', (e) => {
-        e.preventDefault();
-        kotOverview.classList.toggle('list-view');
-        list.classList.toggle('invisible');
-        blok.classList.toggle('invisible');
-    });
-    fire.addEventListener('click', (e) => {
-        e.preventDefault();
-        console.log('fire');
-        alert('fire!!!');
-    });
-
+    
      //checks if a user is logged in, and answers in the console
   firebase.auth().onAuthStateChanged(firebaseUser => {
     if(firebaseUser) {
@@ -80,5 +59,26 @@ export default () => {
       setTimeout('window.location.href="/"', 0)
     }
   });
-  getAllKoten();
+    getAllKoten();
+    let fire = document.getElementById('list-view-icon-fire');
+    let list = document.getElementById("list-view-icon-list");
+    let blok = document.getElementById("list-view-icon-blok");
+    let kotOverview =  document.getElementById('kotOverviewAll');
+    list.addEventListener('click', (e) => {
+        e.preventDefault();
+        kotOverview.classList.toggle('list-view');
+        list.classList.toggle('invisible');
+        blok.classList.toggle('invisible');
+    });
+    blok.addEventListener('click', (e) => {
+        e.preventDefault();
+        kotOverview.classList.toggle('list-view');
+        list.classList.toggle('invisible');
+        blok.classList.toggle('invisible');
+    });
+    fire.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('fire');
+        alert('fire!!!');
+    });
 };
