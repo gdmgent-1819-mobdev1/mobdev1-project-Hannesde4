@@ -1,7 +1,7 @@
 // Only import the compile function from handlebars instead of the entire library
 import { compile } from 'handlebars';
 import update from '../helpers/update';
-import {signOutFirebase, firebase, getAllKoten} from '../helpers/functies';
+import {signOutFirebase, firebase, checkIfKotenFromLocStorAreLoaded, storeKotenInLocalStorage, checkUserStatusForNav, database, sidenavFunctie} from '../helpers/functies';
 
 
 // Import the template to use
@@ -10,6 +10,23 @@ const kotOveviewTemplate = require('../templates/kotOverview.handlebars');
 export default () => {
     // Return the compiled template to the router
     update(compile(kotOveviewTemplate)({  }));
+    sidenavFunctie();
+
+    firebase.auth().onAuthStateChanged(firebaseUser => {
+        if(firebaseUser) {
+            const ref = database.ref(`users/${ firebaseUser.uid}`);
+            ref.on('value', (snapshot) => {
+                const data = snapshot.val();
+                const entity = data.entity;
+                if(entity == 'kotbaas'){
+                    window.location.href="/";
+                }
+            });
+        } else {
+            //als er niet is ingelogd, dan wordt je automatisch naar de homepagina gebracht
+            window.location.href="/";
+        }
+    });
 
     //eventlistener, als er geklikt wordt op een element binnen mijn ol
     document.getElementById('kotOverviewAll').addEventListener('click', (e) => {
@@ -22,44 +39,16 @@ export default () => {
         }
     })
 
-    //functie om de nav te laten werken
-    let element = document.getElementsByClassName("side-nav")[0];
-    document.getElementById("sideNav-open").addEventListener('click', () => {
-        element.classList.toggle("invisible");
-    });
-    document.getElementById("sideNav-close").addEventListener('click', () => {
-        element.classList.toggle("invisible");
-    });
-
-    //if the logout button is clicked
-    document.getElementById("side-nav-logOut").addEventListener('click', (e) => {
-        e.preventDefault();
-        signOutFirebase()
-    });
-
-    
+    checkUserStatusForNav();
      //checks if a user is logged in, and answers in the console
-  firebase.auth().onAuthStateChanged(firebaseUser => {
-    if(firebaseUser) {
-      console.log(firebaseUser);
-      document.getElementsByClassName("login")[0].style.display = 'none';
-      document.getElementById('side-nav-login').style.display = 'none';
-      document.getElementById('side-nav-register').style.display = 'none';
-      document.getElementById('side-nav-logOut').style.display = 'block';
-      document.getElementById('side-nav-logOut').style.display = 'block';
-      document.getElementById('side-nav-profile').style.display = 'block';
-    } else {
-      console.log('not logged in');
-      document.getElementsByClassName("login")[0].style.display = 'block';
-      document.getElementById('side-nav-login').style.display = 'block';
-      document.getElementById('side-nav-register').style.display = 'block';
-      document.getElementById('side-nav-logOut').style.display = 'none';
-      document.getElementById('side-nav-profile').style.display = 'none';
-      //als er niet is ingelogd, dan wordt je automatisch naar de index pagina gebracht
-      setTimeout('window.location.href="/"', 0)
-    }
-  });
-    getAllKoten();
+    (() => {
+        storeKotenInLocalStorage()
+        .then(checkIfKotenFromLocStorAreLoaded)
+        .then(loadMyCode)
+    })();
+};
+
+function loadMyCode(){
     let fire = document.getElementById('list-view-icon-fire');
     let list = document.getElementById("list-view-icon-list");
     let blok = document.getElementById("list-view-icon-blok");
@@ -81,4 +70,4 @@ export default () => {
         console.log('fire');
         alert('fire!!!');
     });
-};
+}

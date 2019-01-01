@@ -2,8 +2,8 @@
     <nav class="main-nav">
         <a href="/" data-navigo>student@kot</a>
         <i class="fas fa-bars" id="sideNav-open"></i>
-        <a href="#/favorites"><i class="fas fa-heart"></i></a>
-        <a href="#/chat"><i class="fas fa-envelope"></i></a>
+        <a href="#/favorites" id="main-nav-favorites" class="invisible"><i class="fas fa-heart"></i></a>
+        <a href="#/chat"><i class="fas fa-envelope invisible" id="main-nav-messages"></i></a>
         <a href="#/login" class="login invisible" id="login-button">Login</a>
     </nav>
 </header>
@@ -12,7 +12,9 @@
     <a href="#/login" data-navigo id="side-nav-login" class="invisible">Login</a>
     <a href="/" data-navigo id="side-nav-register" class="invisible">Registreren</a>
     <a href="#/profile" data-navigo id="side-nav-profile" class="invisible">Profiel bewerken</a>
-    <a href="#/addKot" data-navigo id="side-nav-addKot" class="">Kot toevoegen</a>
+    <a href="#/addKot" data-navigo id="side-nav-addKot" class="invisible">Kot toevoegen</a>
+    <a href="#/mijnKoten" data-navigo id="side-nav-mijnKoten" class="invisible">Mijn koten</a>
+    <a href="#/favorites" data-navigo id="side-nav-favorieten" class="invisible">Mijn favorieten</a>
     <a href="#/about" data-navigo>Over ons</a>
     <a href="/" data-navigo>Contact</a>
     <button id="side-nav-logOut" class="invisible">Uitloggen</button>

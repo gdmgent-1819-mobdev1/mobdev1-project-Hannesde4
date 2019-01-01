@@ -1,7 +1,7 @@
 // Only import the compile function from handlebars instead of the entire library
 import { compile } from 'handlebars';
 import update from '../helpers/update';
-import {signOutFirebase, handleSignUp, firebase} from '../helpers/functies';
+import {signOutFirebase, handleSignUp, firebase, database, sidenavFunctie, checkUserStatusForNav} from '../helpers/functies';
 
 // Import the template to use
 const homeTemplate = require('../templates/home.handlebars');
@@ -11,6 +11,7 @@ export default () => {
   const appName = 'Student@kot';
   // Return the compiled template to the router
   update(compile(homeTemplate)({ appName }));
+  checkUserStatusForNav('not');
   let entity = "leeg";
 
 
@@ -26,22 +27,7 @@ export default () => {
     signOutFirebase()
   });
 
-  //if the logout button is clicked
-  document.getElementById("side-nav-logOut").addEventListener('click', (e) => {
-    e.preventDefault();
-    signOutFirebase()
-  });
-  
-
-  //functie om de nav te laten werken
-  document.getElementById("sideNav-open").addEventListener('click', () => {
-    let element = document.getElementsByClassName("side-nav")[0];
-    element.classList.toggle("invisible");
-  });
-  document.getElementById("sideNav-close").addEventListener('click', () => {
-    let element = document.getElementsByClassName("side-nav")[0];
-    element.classList.toggle("invisible");
-  });
+  sidenavFunctie();
 
   const homeMain = document.getElementById('home-section-main');
   const homeEntity = document.getElementById('home-section-entity');
@@ -58,14 +44,12 @@ export default () => {
   };
   btnRegStu.onclick = () => {
     entity = "student";
-    console.log(entity);
     homeEntity.style.display = 'none';
     homeRegister.style.display = 'block';
     hsLabel2.style.display = "block";
   };
   btnRegKot.onclick = () => {
     entity = "kotbaas";
-    console.log(entity);
     homeEntity.style.display = 'none';
     homeRegister.style.display = 'block';
     hsLabel2.style.display = "none";
@@ -75,19 +59,22 @@ export default () => {
   //checks if a user is logged in, and answers in the console
   firebase.auth().onAuthStateChanged(firebaseUser => {
     if(firebaseUser) {
-      console.log(firebaseUser);
       homeMain.style.display = 'none';
       homeRegister.style.display = 'none';
       homeEntity.style.display = 'none';
       homeBtnLogout.style.display = 'block';
       document.getElementsByClassName("login")[0].style.display = 'none';
-      document.getElementById('side-nav-login').style.display = 'none';
-      document.getElementById('side-nav-register').style.display = 'none';
-      document.getElementById('side-nav-logOut').style.display = 'block';
-      document.getElementById('side-nav-logOut').style.display = 'block';
-      document.getElementById('side-nav-profile').style.display = 'block';
       //als er is ingelogd, dan wordt je automatisch naar de kotview pagina gebracht
-      setTimeout('window.location.href="/#/kotView"', 0)
+      const ref = database.ref(`users/${ firebaseUser.uid}`);
+      ref.on('value', (snapshot) => {
+        const data = snapshot.val();
+        const entity = data.entity;
+        if(entity == 'student'){
+          window.location.href="/#/kotView";
+        }else if(entity == 'kotbaas'){
+          window.location.href="/#/mijnKoten";
+        };
+      });
     } else {
       console.log('not logged in');
       homeMain.style.display = 'block';
@@ -95,10 +82,6 @@ export default () => {
       homeEntity.style.display = 'none';
       homeBtnLogout.style.display = 'none';
       document.getElementsByClassName("login")[0].style.display = 'block';
-      document.getElementById('side-nav-login').style.display = 'block';
-      document.getElementById('side-nav-register').style.display = 'block';
-      document.getElementById('side-nav-logOut').style.display = 'none';
-      document.getElementById('side-nav-profile').style.display = 'none';
     }
   });
 };

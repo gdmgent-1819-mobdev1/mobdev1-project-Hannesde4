@@ -7,7 +7,9 @@ import About from './pages/about';
 import KotOverview from './pages/kotOverview';
 import KotDetail from './pages/kotDetail';
 import Chat from './pages/chat';
+import SingleChat from './pages/singleChat';
 import Favorites from './pages/favorites';
+import MijnKoten from './pages/mijnKoten';
 
 
 export default [
@@ -19,5 +21,7 @@ export default [
   { path: '/kotDetail', view: KotDetail },
   { path: '/about', view: About },
   { path: '/chat', view: Chat },
+  { path: '/singleChat', view: SingleChat },
   { path: '/favorites', view: Favorites },
+  { path: '/mijnKoten', view: MijnKoten },
 ];

@@ -8,27 +8,28 @@
         <label>Foto's uploaden</label>
         <div class="image-kot-content">
             <div id="kot-image-first" class="kot-file-upload">
-                <input type="file" id="file-first" class="kot-file-upload" name="file"/>
+                <input type="file" id="file-first" class="kot-file-upload" name="file" required
+                oninvalid="this.setCustomValidity('Gelieve minstens 1 foto toe te voegen')">
             </div>
             <div class="kot-upload-small-collect">
                 <div id="kot-image-second" class="kot-file-upload small">
-                    <input type="file" id="file-second" class="kot-file-upload small" name="file"/>
+                    <input type="file" id="file-second" class="kot-file-upload small" name="file">
                 </div>
                 <div id="kot-image-third" class="kot-file-upload small">
-                    <input type="file" id="file-third" class="kot-file-upload small" name="file"/>
+                    <input type="file" id="file-third" class="kot-file-upload small" name="file">
                 </div>
             </div>
         </div>
         <label for="register-kot-price">Prijs</label>
-        <input type="number" name="register-kot-price" id="register-kot-price" placeholder="€350">
+        <input type="number" name="register-kot-price" id="register-kot-price" placeholder="€350" required>
         <label for="register-kot-info">Korte omschrijving</label>
-        <textarea type="text" name="register-kot-info" id="register-kot-info" placeholder="">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+        <textarea type="text" name="register-kot-info" id="register-kot-info" required placeholder="">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
         </textarea>
 
         <h3>Overzicht</h3>
 
         <label for="register-kot-type">Type</label>
-        <select id="register-kot-type">
+        <select id="register-kot-type" required>
             <option value="studio">studio</option>
             <option value="appartement">appartement</option>
             <option value="huis">huis</option>
@@ -36,49 +37,49 @@
         </select>
 
         <label for="register-kot-oppervlakte">Oppervlakte</label>
-        <input type="number" name="register-kot-oppervlakte" id="register-kot-oppervlakte" placeholder="50m2">
+        <input type="number" name="register-kot-oppervlakte" id="register-kot-oppervlakte" placeholder="50m2" required>
 
         <label for="register-kot-floor">Verdieping</label>
-        <input type="number" name="register-kot-floor" id="register-kot-floor" placeholder="2">
+        <input type="number" name="register-kot-floor" id="register-kot-floor" placeholder="2" required>
 
         <label for="register-kot-maxPersons">Aantal Personen</label>
-        <input type="number" name="register-kot-maxPersons" id="register-kot-maxPersons" placeholder="1">
+        <input type="number" name="register-kot-maxPersons" id="register-kot-maxPersons" placeholder="1" required>
 
         <label for="register-kot-kotAmount">Aantal koten in het pand</label>
-        <input type="number" name="register-kot-kotAmount" id="register-kot-kotAmount" placeholder="4">
+        <input type="number" name="register-kot-kotAmount" id="register-kot-kotAmount" placeholder="4" required>
 
         <h3>Interieur</h3>
 
         <label for="register-kot-douche">Douche</label>
-        <select id="register-kot-douche">
+        <select id="register-kot-douche" required>
             <option value="neen">neen</option>
             <option value="gemeenschappelijk">gemeenschappelijk</option>
             <option value="prive">privé</option>
         </select>
 
         <label for="register-kot-bad">Bad</label>
-        <select id="register-kot-bad">
+        <select id="register-kot-bad" required>
             <option value="neen">neen</option>
             <option value="gemeenschappelijk">gemeenschappelijk</option>
             <option value="prive">privé</option>
         </select>
 
         <label for="register-kot-toilet">Toilet</label>
-        <select id="register-kot-toilet">
+        <select id="register-kot-toilet" required>
             <option value="neen">neen</option>
             <option value="gemeenschappelijk">gemeenschappelijk</option>
             <option value="prive">privé</option>
         </select>
 
         <label for="register-kot-keuken">Keuken</label>
-        <select id="register-kot-keuken">
+        <select id="register-kot-keuken" required>
             <option value="neen">neen</option>
             <option value="gemeenschappelijk">gemeenschappelijk</option>
             <option value="prive">privé</option>
         </select>
 
         <label for="register-kot-bemeubeld">Bemeubeld</label>
-        <select id="register-kot-bemeubeld">
+        <select id="register-kot-bemeubeld" required>
             <option value="neen">neen</option>
             <option value="gemeenschappelijk">ja</option>
             <option value="prive">gedeeltelijk</option>
@@ -87,13 +88,13 @@
         <h3>Adres</h3>
 
         <label for="register-kot-street">Straat en nummer</label>
-        <input type="text" name="register-kot-street" id="register-kot-street" placeholder="Poststraat 123">
+        <input type="text" name="register-kot-street" id="register-kot-street" placeholder="Poststraat 123" required>
 
         <label for="register-kot-extra">Toevoeging</label>
         <input type="text" name="register-kot-extra" id="register-kot-extra" placeholder="Bus 3">
 
         <label for="register-kot-place">Gemeente</label>
-        <input type="text" name="register-kot-place" id="register-kot-place" placeholder="Gent">
+        <input type="text" name="register-kot-place" id="register-kot-place" placeholder="Gent" required>
 
 
         <input type="submit" class="btn-basic" id="btn-addKot-submit" value="Publiceren">

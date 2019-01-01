@@ -1,7 +1,7 @@
 // Only import the compile function from handlebars instead of the entire library
 import { compile } from 'handlebars';
 import update from '../helpers/update';
-import {getCurUserFromDatabase, updateUser, signOutFirebase, firebase} from '../helpers/functies'
+import {getCurUserFromDatabase, updateUser, signOutFirebase, firebase, checkUserStatusForNav, sidenavFunctie} from '../helpers/functies'
 
 let myUserId = "";
 
@@ -12,21 +12,8 @@ export default () => {
     // Return the compiled template to the router
     update(compile(profileTemplate)({  }));
 
-    //functie om de nav te laten werken
-    document.getElementById("sideNav-open").addEventListener('click', () => {
-        let element = document.getElementsByClassName("side-nav")[0];
-        element.classList.toggle("invisible");
-      });
-      document.getElementById("sideNav-close").addEventListener('click', () => {
-        let element = document.getElementsByClassName("side-nav")[0];
-        element.classList.toggle("invisible");
-      });
-
-    //if the logout button is clicked
-    document.getElementById("side-nav-logOut").addEventListener('click', (e) => {
-        e.preventDefault();
-        signOutFirebase()
-    });
+    checkUserStatusForNav();
+    sidenavFunctie();
 
     //checks if a user is logged in, and answers in the console
   firebase.auth().onAuthStateChanged(firebaseUser => {
@@ -50,14 +37,12 @@ export default () => {
     document.getElementById('btn-profile-update-user-info').addEventListener('click', (e) => {
         e.preventDefault();
         let place = document.getElementById('place').value;
-        let lattitude = "test";
-        let longitude = "test";
         let street = document.getElementById('street').value;
         let extra = document.getElementById('extra').value;
         let firstName = document.getElementById('firstname').value;
         let lastName = document.getElementById('lastname').value;
         let highschool = document.getElementById('hogeschoolChoice').value;
         let phone = document.getElementById('phone').value;
-        updateUser(place, street, extra, lattitude, longitude, firstName, lastName, highschool, phone, myUserId);
+        updateUser(place, street, extra, firstName, lastName, highschool, phone, myUserId);
       });
 };
