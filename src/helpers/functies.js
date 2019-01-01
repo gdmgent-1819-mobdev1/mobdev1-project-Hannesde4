@@ -139,20 +139,15 @@ const getCurUserFromDatabase = (uid) => {
     console.log(snapshot.val());
     const data = snapshot.val();
     console.log(data);
-    profileChangeValues(data.adress.city, data.adress.street, data.adress.extra, data.firstName, data.lastName, data.hogeschool, data.phone);
+    document.getElementById('place').value = data.adress.city;
+    document.getElementById('street').value = data.adress.street;
+    document.getElementById('extra').value = data.adress.extra;
+    document.getElementById('firstname').value = data.firstName;
+    document.getElementById('lastname').value = data.lastName;
+    document.getElementById('hogeschoolChoice').value = data.hogeschool;
+    document.getElementById('phone').value = data.phone;
     myEntity = data.entity;
   });
-};
-
-// functie die het profiel gaat updaten als er de nieuwe gegevens worden opgeslagen
-const profileChangeValues = (place, street, extra, firstname, lastname, highschool, phone) => {
-  document.getElementById('place').value = place;
-  document.getElementById('street').value = street;
-  document.getElementById('extra').value = extra;
-  document.getElementById('firstname').value = firstname;
-  document.getElementById('lastname').value = lastname;
-  document.getElementById('hogeschoolChoice').value = highschool;
-  document.getElementById('phone').value = phone;
 };
 
 // functie die de aangepaste gegevens van de gebruiker gaat uploaden
@@ -364,8 +359,6 @@ const fileUpload = (file, metadata, box) => {
 
 const storeKotenInLocalStorage = () => {
   return new Promise((resolve, reject) =>{
-    console.log('first method completed');
-    resolve({data: '123'});
     const ref = database.ref('koten/');
     ref.on('value', (snapshot) => {
       // maakt een array waarin ik elke kot-key ga opslaan
@@ -516,6 +509,7 @@ const checkUserStatusForNav = (status) => {
         }
         //gaat de entity van de huidige gebruiker opslaan in de local storage
         localStorage['currentUserEntity'] = entity;
+        localStorage['currentUserId'] = firebase.auth().currentUser.uid;
       });
       document.getElementsByClassName("login")[0].style.display = 'none';
       document.getElementById('side-nav-login').style.display = 'none';
@@ -594,10 +588,87 @@ const sidenavFunctie = () => {
 };
 
 const loadMyKoten = () => {
-  const koten = document.getElementById('collectionMyKoten');
+  storeKotenInLocalStorage();
+  const koten = document.getElementById('kotOverviewAll');
   // gaat per kot van de huidige kotbaas een div aanmaken en aan de html toevoegen
-  koten.innerHTML += `<div class="myKot uniqueKot" id="${  key  }"><span class="price">${  kot.info.prijs  }</span></div>`;
-  document.getElementById(key).style.backgroundImage = `url('${  fotoArray[0]  }')`;
+  let kotKeysAll = localStorage.getItem('kotKeys');
+  // var die de string met al mijn kotKeys gaat inladen
+  const kotKeys = kotKeysAll.split(',');
+  // voor elke key dat er in kotKeys zit wordt onderstaande dingen overlopen
+  kotKeys.forEach((key) => {
+      const kot = JSON.parse(localStorage[key]);
+      if (kot.kotbaas == localStorage.getItem('currentUserId')){
+        // gaat per kot een div aanmaken en aan de html toevoegen
+        const fotoArray = kot.foto.split(',');
+        koten.innerHTML += `<div class="kotOverview uniqueKot" id="${  key  }"><span class="price">${  kot.info.prijs  }</span></div>`;
+        document.getElementById(key).style.backgroundImage = `url('${  fotoArray[0]  }')`;
+      };
+  });
+};
+
+const updateKot = (kotId, place, street, extra, price, extraInfo, type, oppervlakte, verdieping, maxPersons, kotenInPand, douche, bad, toilet, keuken, bemeubeld, userId) => {
+  const foto = [];
+  if (localStorage['kot-image-first'] !== 'undefind') {
+    foto.push(localStorage['kot-image-first']);
+  }
+    
+    if (localStorage['kot-image-second'] !== 'undefind') {
+    foto.push(localStorage['kot-image-second']);
+  }
+    if (localStorage['kot-image-third'] !== 'undefind') {
+    foto.push(localStorage['kot-image-third']);
+  }
+  console.log(foto);
+  let fotos = foto.toString();
+  const adres = street + ', ' + place;
+  const URL = `https://api.mapbox.com/geocoding/v5/mapbox.places/${adres}.json?access_token=${config.mapBoxToken}&cachebuster=1545701868024&autocomplete=true&limit=1`;
+
+  //data aanroepen uit een APi via fetch
+  fetch(URL)
+  .then((response) => {
+      return response.json();
+  }).then((data) =>{
+    const lattitude = JSON.stringify(data.features[0].center[0]);
+    const longitude = JSON.stringify(data.features[0].center[1]);
+    // A post entry.
+    const postData = {
+      'kotbaas': userId,
+      'adress': {
+        'city': place,
+        'street': street,
+        'extra': extra,
+        'coordinates': {
+          'lattitude': lattitude,
+          'longitude': longitude,
+        },
+      },
+      'info': {
+        'prijs': price,
+        'extraInfo': extraInfo,
+        'overzicht': {
+          'type': type,
+          'oppervlakte': oppervlakte,
+          'verdieping': verdieping,
+          'maxPersonen': maxPersons,
+          'kotenInPand': kotenInPand,
+        },
+        'interieur': {
+          'douche': douche,
+          'bad': bad,
+          'toilet': toilet,
+          'keuken': keuken,
+          'bemeubeld': bemeubeld,
+        },
+      },
+      'foto': fotos,
+    };
+      // Write the new post's data simultaneously in the posts list and the user's post list.
+    const updates = {};
+    updates[`koten/${ kotId }`] = postData;
+
+    return firebase.database().ref().update(updates);
+  });
+  window.location.href = '/#/mijnKotenDetail';
 };
 
 export {
@@ -623,4 +694,5 @@ export {
   sendMessage,
   sidenavFunctie,
   loadMyKoten,
+  updateKot,
 };

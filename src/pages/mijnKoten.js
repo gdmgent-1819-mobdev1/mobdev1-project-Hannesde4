@@ -16,13 +16,13 @@ export default () => {
     loadMyKoten();
 
     //eventlistener, als er geklikt wordt op een element binnen mijn ol
-    document.getElementById('collectionMyKoten').addEventListener('click', (e) => {
+    document.getElementById('kotOverviewAll').addEventListener('click', (e) => {
         //er wordt gekeken of er geklikt is op een i-element
         if(e.target && e.target.nodeName == 'DIV' && e.target.classList[1] == 'uniqueKot'){
             let key = e.target.id;
-            console.log(key);
             localStorage['kotInDetail'] = key;
-            setTimeout('window.location.href="/#/kotDetail"', 0)
+            window.location.href="/#/mijnKotenDetail";
+            console.log(key);
         }
     })
 };

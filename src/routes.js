@@ -10,6 +10,7 @@ import Chat from './pages/chat';
 import SingleChat from './pages/singleChat';
 import Favorites from './pages/favorites';
 import MijnKoten from './pages/mijnKoten';
+import MijnKotenDetail from './pages/mijnKotenDetail';
 
 
 export default [
@@ -24,4 +25,5 @@ export default [
   { path: '/singleChat', view: SingleChat },
   { path: '/favorites', view: Favorites },
   { path: '/mijnKoten', view: MijnKoten },
+  { path: '/mijnKotenDetail', view: MijnKotenDetail },
 ];

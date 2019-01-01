@@ -1,7 +1,7 @@
 // Only import the compile function from handlebars instead of the entire library
 import { compile } from 'handlebars';
 import update from '../helpers/update';
-import {getCurUserFromDatabase, updateUser, signOutFirebase, firebase, checkUserStatusForNav, sidenavFunctie} from '../helpers/functies'
+import {getCurUserFromDatabase, updateUser, firebase, checkUserStatusForNav, sidenavFunctie} from '../helpers/functies'
 
 let myUserId = "";
 

@@ -1,0 +1,107 @@
+<!--
+
+-->
+{{> header }}
+<div class="page mijnKoten">
+    <div class="wrapper collection-mijn-koten" id="collectionMyKoten">
+        <form action="" class="start-conversation" id="update-kotInfo">
+        
+        <label>Foto's uploaden</label>
+        <div class="image-kot-content">
+            <div id="kot-image-first" class="kot-file-upload">
+                <img src="{{fotoArray1}}" alt="">
+                <input type="file" id="file-first" class="kot-file-upload" name="file">
+            </div>
+            <div class="kot-upload-small-collect">
+                <div id="kot-image-second" class="kot-file-upload small">
+                    <img src="{{fotoArray2}}" alt="">
+                    <input type="file" id="file-second" class="kot-file-upload small" name="file">
+                </div>
+                <div id="kot-image-third" class="kot-file-upload small">
+                    <img src="{{fotoArray3}}" alt="" align="middle">
+                    <input type="file" id="file-third" class="kot-file-upload small" name="file">
+                </div>
+            </div>
+        </div>
+        <label for="register-kot-price">Prijs</label>
+        <input type="number" name="register-kot-price" id="register-kot-price" placeholder="€350" value="{{kot.info.prijs}}" required>
+        <label for="register-kot-info">Korte omschrijving</label>
+        <textarea type="text" name="register-kot-info" id="register-kot-info" required placeholder="">{{kot.info.extraInfo}}
+        </textarea>
+
+        <h3>Overzicht</h3>
+
+        <label for="register-kot-type">Type</label>
+        <select id="register-kot-type" value="{{kot.info.overzicht.type}}"required>
+            <option value="studio">studio</option>
+            <option value="appartement">appartement</option>
+            <option value="huis">huis</option>
+            <option value="kamer">kamer</option>
+        </select>
+
+        <label for="register-kot-oppervlakte">Oppervlakte</label>
+        <input type="number" name="register-kot-oppervlakte" id="register-kot-oppervlakte" placeholder="50m2" value="{{kot.info.overzicht.oppervlakte}}" required>
+
+        <label for="register-kot-floor">Verdieping</label>
+        <input type="number" name="register-kot-floor" id="register-kot-floor" placeholder="2" value="{{kot.info.overzicht.verdieping}}" required>
+
+        <label for="register-kot-maxPersons">Aantal Personen</label>
+        <input type="number" name="register-kot-maxPersons" id="register-kot-maxPersons" placeholder="1" value="{{kot.info.overzicht.maxPersonen}}" required>
+
+        <label for="register-kot-kotAmount">Aantal koten in het pand</label>
+        <input type="number" name="register-kot-kotAmount" id="register-kot-kotAmount" placeholder="4" value="{{kot.info.overzicht.kotenInPand}}" required>
+
+        <h3>Interieur</h3>
+
+        <label for="register-kot-douche">Douche</label>
+        <select id="register-kot-douche" value="{{kot.info.interieur.douche}}" required>
+            <option value="neen">neen</option>
+            <option value="gemeenschappelijk">gemeenschappelijk</option>
+            <option value="prive">privé</option>
+        </select>
+
+        <label for="register-kot-bad">Bad</label>
+        <select id="register-kot-bad" value="{{kot.info.interieur.bad}}" required>
+            <option value="neen">neen</option>
+            <option value="gemeenschappelijk">gemeenschappelijk</option>
+            <option value="prive">privé</option>
+        </select>
+
+        <label for="register-kot-toilet">Toilet</label>
+        <select id="register-kot-toilet" value="{{kot.info.interieur.toilet}}" required>
+            <option value="neen">neen</option>
+            <option value="gemeenschappelijk">gemeenschappelijk</option>
+            <option value="prive">privé</option>
+        </select>
+
+        <label for="register-kot-keuken">Keuken</label>
+        <select id="register-kot-keuken" value="{{kot.info.interieur.keuken}}" required>
+            <option value="neen">neen</option>
+            <option value="gemeenschappelijk">gemeenschappelijk</option>
+            <option value="prive">privé</option>
+        </select>
+
+        <label for="register-kot-bemeubeld">Bemeubeld</label>
+        <select id="register-kot-bemeubeld" value="{{kot.info.interieur.bemeubeld}}" required>
+            <option value="neen">neen</option>
+            <option value="gemeenschappelijk">ja</option>
+            <option value="prive">gedeeltelijk</option>
+        </select>
+
+        <h3>Adres</h3>
+
+        <label for="register-kot-street">Straat en nummer</label>
+        <input type="text" name="register-kot-street" id="register-kot-street" placeholder="Poststraat 123" value="{{kot.adress.street}}" required>
+
+        <label for="register-kot-extra">Toevoeging</label>
+        <input type="text" name="register-kot-extra" id="register-kot-extra" placeholder="Bus 3" value="{{kot.adress.extra}}">
+
+        <label for="register-kot-place">Gemeente</label>
+        <input type="text" name="register-kot-place" id="register-kot-place" placeholder="Gent" value="{{kot.adress.city}}" required>
+
+        <button class="btn-basic" id="btn-kot-update-my-kot">Wijzigingen bewaren</button>
+        </form>
+    </div>
+</div>
+
+{{!-- {{> footer }} --}}
