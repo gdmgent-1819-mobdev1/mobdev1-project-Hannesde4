@@ -1,7 +1,7 @@
 // Only import the compile function from handlebars instead of the entire library
 import { compile } from 'handlebars';
 import update from '../helpers/update';
-import {signOutFirebase, firebase, checkUserStatusForNav, database, sidenavFunctie, loadAllKoten, allKotenToMap} from '../helpers/functies';
+import {signOutFirebase, firebase, checkUserStatusForNav, database, sidenavFunctie, loadAllKoten, allKotenToMap, loadTinder} from '../helpers/functies';
 
 // Import the template to use
 const kotOveviewTemplate = require('../templates/kotOverview.handlebars');
@@ -89,7 +89,7 @@ function loadMyCode(){
     fire.addEventListener('click', (e) => {
         e.preventDefault();
         console.log('fire');
-        alert('fire!!!');
+        loadTinder();
     });
     map.addEventListener('click', (e) => {
         e.preventDefault();

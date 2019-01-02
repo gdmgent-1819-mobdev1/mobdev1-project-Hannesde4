@@ -645,7 +645,6 @@ const loadAllKoten = (filter) => {
 /*   let kotKeysAll = localStorage.getItem('kotKeys');
   if(kotKeysAll == undefined){ */
 
-  const userId = localStorage.getItem('currentUserId');
   const ref = database.ref('koten/');
   ref.orderByChild(filterKey).on('value', (snapshot) => {
     const koten = document.getElementById('kotOverviewAll');
@@ -874,6 +873,33 @@ const allKotenToMap = () => {
   }
 }
 
+const loadTinder = () => {
+  let kotKeysAll = localStorage.getItem('kotKeys');
+  console.log(kotKeysAll);
+  // het element kotOverview uit mijn overzichtpagina in een var steken
+  // var die de string met al mijn kotKeys gaat inladen
+  const kotKeys = kotKeysAll.split(',');
+  let kotOverview =  document.getElementById('kotOverviewAll');
+  let likeId = userId+'+++'+[];
+  const userId = localStorage.getItem('currentUserId');
+      const refer = database.ref('likes/');
+      refer.once('value', function(snapshot) {
+        if (snapshot.hasChild(likeId)) {
+          console.log('al geliked');
+        }else{
+
+          kotOverview.innerHTML = 
+          `<div class="tinder" id="${key}">
+                <img src="${image}" alt="">
+                <div class="info">
+                    <p>${prijs}</p>
+                    <p>${adress}</p>
+                </div>
+            </div>`;
+        };
+      });
+}
+
 export {
   signOutFirebase,
   signInFirebase,
@@ -904,4 +930,5 @@ export {
   loadAllKoten,
   getLikedKoten,
   allKotenToMap,
+  loadTinder,
 };
