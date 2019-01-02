@@ -5,3 +5,31 @@ body
                 margin-right: 0
             .kotOverview:nth-child(odd)
                 margin-right: 2.5%
+@media screen and (min-width: 500px)
+    body
+        #app
+            .mijnKoten
+                .kotOverview
+                    height: 200px
+
+@media screen and (min-width: 768px)
+    body
+        #app
+            .mijnKoten
+                .kotOverview
+                    width: 31.66666666%
+                .kotOverview:nth-child(odd)
+                    margin-right: 0
+                .kotOverview:nth-child(3n+2)
+                    margin-left: 2.5%
+                    margin-right: 2.5%
+                .wrapper.list-view .kotOverview
+                    height: 200px
+                .wrapper.list-view .kotOverview:nth-child(3n+2)
+                    margin-left: 0
+                    margin-right: 0
+                .list-view-nav
+                    width: 100%
+                    float: left
+                    i
+                        font-size: 2rem

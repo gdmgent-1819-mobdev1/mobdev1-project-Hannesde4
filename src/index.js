@@ -22,11 +22,15 @@ routes.forEach((route) => {
   });
 });
 
+/* router.on('/kotDetail?', function (key) {
+    // If we have http://site.com/user/42/save as a url then
+    key = localStorage.getItem('urlKey');
+    //window.location.href="/#/kotDetail?"+key;
+}).resolve(); */
+
 // This catches all non-existing routes and redirects back to the home
 router.notFound(() => {
   router.navigate('/');
-});
-router.resolve();
-window.onload = () => {
+})
 
-};
+router.resolve();

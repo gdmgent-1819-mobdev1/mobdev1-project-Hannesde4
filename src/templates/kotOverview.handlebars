@@ -1,11 +1,17 @@
 {{> header }}
 
 <div class="page">
+     <div class="list-view-nav">
+        <select id="chose-sorting-method">
+            {{!-- <option value="NewToOld">nieuwste eerst</option>
+            <option value="OldToNew">oudste eerst</option> --}}
+            <option value="prijs">prijs</option>
+            <option value="oppervlakte">oppervlakte</option>
+        </select>
+        <i class="fas fa-th-large invisible" id="list-view-icon-blok"></i>
+        <i class="fas fa-list" id="list-view-icon-list"></i>
+        <i class="fas fa-fire" id="list-view-icon-fire"></i>
+    </div>
     <div class="wrapper" id="kotOverviewAll">
-        <div class="list-view-nav">
-            <i class="fas fa-th-large invisible" id="list-view-icon-blok"></i>
-            <i class="fas fa-list" id="list-view-icon-list"></i>
-            <i class="fas fa-fire" id="list-view-icon-fire"></i>
-        </div>
     </div>
 </div>

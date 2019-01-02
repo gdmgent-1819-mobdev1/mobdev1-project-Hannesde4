@@ -6,7 +6,7 @@
     <div class="wrapper collection-mijn-koten" id="collectionMyKoten">
         <form action="" class="start-conversation" id="update-kotInfo">
         
-        <label>Foto's uploaden</label>
+        {{!-- <label>Foto's uploaden</label>
         <div class="image-kot-content">
             <div id="kot-image-first" class="kot-file-upload">
                 <img src="{{fotoArray1}}" alt="">
@@ -22,12 +22,11 @@
                     <input type="file" id="file-third" class="kot-file-upload small" name="file">
                 </div>
             </div>
-        </div>
+        </div> --}}
         <label for="register-kot-price">Prijs</label>
         <input type="number" name="register-kot-price" id="register-kot-price" placeholder="€350" value="{{kot.info.prijs}}" required>
         <label for="register-kot-info">Korte omschrijving</label>
-        <textarea type="text" name="register-kot-info" id="register-kot-info" required placeholder="">{{kot.info.extraInfo}}
-        </textarea>
+        <textarea type="text" name="register-kot-info" id="register-kot-info" required placeholder="">{{kot.info.extraInfo}}</textarea>
 
         <h3>Overzicht</h3>
 

@@ -25,11 +25,11 @@ export default () => {
     checkUserStatusForNav();
     sidenavFunctie();
 
-    document.getElementById('file-first').addEventListener('change', handleFileSelect1, false);
+    /* document.getElementById('file-first').addEventListener('change', handleFileSelect1, false);
 
     document.getElementById('file-second').addEventListener('change', handleFileSelect2, false);
 
-    document.getElementById('file-third').addEventListener('change', handleFileSelect3, false);
+    document.getElementById('file-third').addEventListener('change', handleFileSelect3, false); */
     
     document.getElementById('btn-kot-update-my-kot').addEventListener('click', (e) => {
         e.preventDefault();

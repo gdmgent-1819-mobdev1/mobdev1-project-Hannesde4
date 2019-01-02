@@ -5,10 +5,12 @@
     background-color: $header-bg
     color: $base-color
     position: fixed
+    left: 0
     top: 0
     max-width: 100vw
     width: 100%
     box-sizing: border-box
+    z-index: 9998
     .main-nav
         max-width: 100%
         width: 100%
@@ -17,6 +19,10 @@
         float: right
         color: $base-color
         font-size: 2rem
+    #main-nav-favorites-a, #main-nav-messages-a
+        display: block
+        float: right
+        margin-right: 10px
     a.login
         border: solid 2px $base-color
         border-radius: 5px

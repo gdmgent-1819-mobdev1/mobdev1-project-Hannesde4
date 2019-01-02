@@ -24,8 +24,12 @@ export default () => {
         e.preventDefault();
         const element = document.getElementById('value-new-message');
         let message = element.value;
-        sendMessage(localStorage['conversationDetail'], firebase.auth().currentUser.uid, message);
-        element.value = '';
-        loadSingleChat();
+        if(message == ""){
+            alert('gelieve eerst iets te schrijven');
+        }else{
+            sendMessage(localStorage['conversationDetail'], firebase.auth().currentUser.uid, message);
+            element.value = '';
+            loadSingleChat();
+        }
     });
 };

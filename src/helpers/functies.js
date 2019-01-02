@@ -76,8 +76,8 @@ const handleSignUp = (entity) => {
   }
   // Sign in with email and pass.
   // [START createwithemail]
-  auth.createUserWithEmailAndPassword(email, password).then((data) => {
-    console.log('uid', data.user.uid);
+  auth.createUserWithEmailAndPassword(email, password).then((person) => {
+    console.log('uid', person.user.uid);
     const adres = street + ', ' + place;
     const URL = `https://api.mapbox.com/geocoding/v5/mapbox.places/${adres}.json?access_token=${config.mapBoxToken}&cachebuster=1545701868024&autocomplete=true&limit=1`;
 
@@ -88,7 +88,7 @@ const handleSignUp = (entity) => {
     }).then((data) =>{
       const lattitude = JSON.stringify(data.features[0].center[0]);
       const longitude = JSON.stringify(data.features[0].center[1]);
-      writeUserData(data.user.uid, place, lattitude, longitude, street, extra, entity, firstName, lastName, hogeschool, phone);
+      writeUserData(person.user.uid, place, lattitude, longitude, street, extra, entity, firstName, lastName, hogeschool, phone);
     });
 
     // Here if you want you can sign in the user
@@ -105,9 +105,8 @@ const handleSignUp = (entity) => {
     console.log(error);
     // [END_EXCLUDE]
   });
-  getAllKoten();
 };
-
+ 
 // functie die de overige data in een object plaatst, en deze in de firebase database gaat opslaan
 const writeUserData = (userId, place, lattitude, longitude, street, extra, entity, firstName, lastName, hogeschool, phone) => {
   console.log(userId);
@@ -383,7 +382,6 @@ const storeKotenInLocalStorage = () => {
 
 const checkIfKotenFromLocStorAreLoaded = () => {
   return new Promise(function(resolve, reject){
-    console.log('second method completed');
     console.log(localStorage.getItem('kotKeys'));
     //fix zodat bij login de koten juist geladen worden uit de localstorage en er geen witte pagina tevoorschijn komt
     if( localStorage.getItem('kotKeys') === null){
@@ -462,7 +460,7 @@ const getAllMessagesFromCurrentUser = () => {
       const childKey = childSnapshot.key;
       const childKeyArray = childKey.split('+');
       //als de eerste waarde van de chatId gelijk is aan de huidige gebruiker
-      if (childKeyArray[0] == firebase.auth().currentUser.uid) {
+      if (childKeyArray[0] == firebase.auth().currentUser.uid || childKeyArray[1] == firebase.auth().currentUser.uid) {
         //maakt verbinding naar de users van de database waar de tweede waarde van de chatId de kotbaas aangeeft
         const refer = database.ref('users/' + childKeyArray[1]);
         //dit gaat de waarden van de kotbaas uit de database halen
@@ -499,6 +497,11 @@ const checkUserStatusForNav = (status) => {
       ref.on('value', (snapshot) => {
         const data = snapshot.val();
         const entity = data.entity;
+        if(localStorage['currentUserId'] == undefined){
+          let message = 'Welkom ' + data.firstName;
+          let title = 'Welkom';
+          sendNotification(message, title);
+        }
         //gaat kijken of er een student of kotbaas is ingelogd
         if (entity == 'student'){
           document.getElementById('side-nav-favorieten').style.display = 'block';
@@ -589,21 +592,102 @@ const sidenavFunctie = () => {
 
 const loadMyKoten = () => {
   storeKotenInLocalStorage();
-  const koten = document.getElementById('kotOverviewAll');
   // gaat per kot van de huidige kotbaas een div aanmaken en aan de html toevoegen
-  let kotKeysAll = localStorage.getItem('kotKeys');
-  // var die de string met al mijn kotKeys gaat inladen
-  const kotKeys = kotKeysAll.split(',');
-  // voor elke key dat er in kotKeys zit wordt onderstaande dingen overlopen
-  kotKeys.forEach((key) => {
-      const kot = JSON.parse(localStorage[key]);
-      if (kot.kotbaas == localStorage.getItem('currentUserId')){
-        // gaat per kot een div aanmaken en aan de html toevoegen
+/*   let kotKeysAll = localStorage.getItem('kotKeys');
+  if(kotKeysAll == undefined){ */
+    const ref = database.ref('koten/');
+    ref.orderByChild('koten/').on('value', (snapshot) => {
+      // counter om te tellen hoeveel keys er zijn
+      let i = 0;
+      snapshot.forEach((childSnapshot) => {
+        const childKey = childSnapshot.key;
+        const kot = childSnapshot.val();
         const fotoArray = kot.foto.split(',');
-        koten.innerHTML += `<div class="kotOverview uniqueKot" id="${  key  }"><span class="price">${  kot.info.prijs  }</span></div>`;
-        document.getElementById(key).style.backgroundImage = `url('${  fotoArray[0]  }')`;
+        if (kot.kotbaas == firebase.auth().currentUser.uid){
+        const koten = document.getElementById('kotOverviewAll');
+        koten.innerHTML += `<a class="kotOverview uniqueKot" id="${  childKey  }"><span class="price">€${  kot.info.prijs  }</span><div class="pinMap id="mapKey=${  childKey  }"><i class="fas fa-map-marker-alt kot-marker-map"></i></div></a>`;
+        document.getElementById(childKey).style.backgroundImage = `url('${  fotoArray[0]  }')`;
+        }
+      });
+    });
+/*   } else {
+    // var die de string met al mijn kotKeys gaat inladen
+    const kotKeys = kotKeysAll.split(',');
+    // voor elke key dat er in kotKeys zit wordt onderstaande dingen overlopen
+    kotKeys.forEach((key) => {
+        const kot = JSON.parse(localStorage[key]);
+        if (kot.kotbaas == localStorage.getItem('currentUserId')){
+          // gaat per kot een div aanmaken en aan de html toevoegen
+          const fotoArray = kot.foto.split(',');
+          koten.innerHTML += `<div class="kotOverview uniqueKot" id="${  key  }"><span class="price">€${  kot.info.prijs  }</span><div class="pinMap id="mapKey=${  key  }"><i class="fas fa-map-marker-alt kot-marker-map"></i></div></div>`;
+          document.getElementById(key).style.backgroundImage = `url('${  fotoArray[0]  }')`;
+        };
+    });
+  }; */
+};
+
+const loadAllKoten = (filter) => {
+  storeKotenInLocalStorage();
+  let filterKey = 'info/prijs'
+  if( filter == 'prijs' ){
+    console.log('info.prijs');
+    filterKey = 'info/prijs';
+  }else if( filter == 'oppervlakte' ){
+    filterKey = 'info/overzicht/oppervlakte';
+    console.log('info.oppervlakte');
+  } 
+  // gaat per kot van de huidige kotbaas een div aanmaken en aan de html toevoegen
+/*   let kotKeysAll = localStorage.getItem('kotKeys');
+  if(kotKeysAll == undefined){ */
+
+  const userId = localStorage.getItem('currentUserId');
+  const ref = database.ref('koten/');
+  ref.orderByChild(filterKey).on('value', (snapshot) => {
+    const koten = document.getElementById('kotOverviewAll');
+    koten.innerHTML = '';
+    let status = '';
+    const pointers = [];
+    snapshot.forEach((childSnapshot) => {
+      const childKey = childSnapshot.key;
+      const kot = childSnapshot.val();
+      const fotoArray = kot.foto.split(',');
+      let userId = localStorage.getItem('currentUserId');
+
+      const pointer = {
+        lattitude: kot.adress.coordinates.lattitude,
+        longitude: kot.adress.coordinates.longitude,
+        image: fotoArray[0],
+        adress: kot.adress.street + " " + kot.adress.city,
+        price: kot.info.prijs,
       };
+      pointers.push(pointer);
+      localStorage['pointers'] = JSON.stringify(pointers);
+
+      let likeId = userId+'+++'+childKey;
+      const refer = database.ref('likes/');
+      refer.once('value', function(snapshot) {
+        if (snapshot.hasChild(likeId)) {
+          koten.innerHTML += `<a href="/#/kotDetail/id=${  childKey  }/" class="kotOverview uniqueKot" id="${  childKey  }"><span class="price">€${  kot.info.prijs  }</span><i class="liked fas fa-heart kot-like" id="likeKey=${  childKey  }"></i></a>`;
+          document.getElementById(childKey).style.backgroundImage = `url('${  fotoArray[0]  }')`;
+        }else{
+          koten.innerHTML += `<a href="/#/kotDetail/id=${  childKey  }/" class="kotOverview uniqueKot" id="${  childKey  }"><span class="price">€${  kot.info.prijs  }</span><i class="fas fa-heart kot-like" id="likeKey=${  childKey  }"></i></a>`;
+          document.getElementById(childKey).style.backgroundImage = `url('${  fotoArray[0]  }')`;
+        }
+      });
+    });
   });
+/*   } else {
+    // var die de string met al mijn kotKeys gaat inladen
+    const kotKeys = kotKeysAll.split(',');
+    // voor elke key dat er in kotKeys zit wordt onderstaande dingen overlopen
+    kotKeys.forEach((key) => {
+      const kot = JSON.parse(localStorage[key]);
+      // gaat per kot een div aanmaken en aan de html toevoegen
+      const fotoArray = kot.foto.split(',');
+      koten.innerHTML += `<div class="kotOverview uniqueKot" id="${  key  }"><span class="price">€${  kot.info.prijs  }</span><div class="pinMap id="mapKey=${  key  }"><i class="fas fa-map-marker-alt kot-marker-map"></i></div></div>`;
+      document.getElementById(key).style.backgroundImage = `url('${  fotoArray[0]  }')`;
+    }); 
+  };*/
 };
 
 const updateKot = (kotId, place, street, extra, price, extraInfo, type, oppervlakte, verdieping, maxPersons, kotenInPand, douche, bad, toilet, keuken, bemeubeld, userId) => {
@@ -671,6 +755,91 @@ const updateKot = (kotId, place, street, extra, price, extraInfo, type, oppervla
   window.location.href = '/#/mijnKotenDetail';
 };
 
+const sendNotification = (message, title) => {
+  if (isSupported()) {
+    requestPermission();
+    console.log(message, title);
+    fireNotification(message, title);
+  }
+}
+const isSupported = () => {
+  if ('Notification' in window) {
+    return true;
+  }
+  // no support :(
+  return false;
+}
+
+const requestPermission = () => {
+  if (Notification && Notification.permission === 'default') {
+    Notification.requestPermission(function (permission) {
+      if (!('permission' in Notification)) {
+        Notification.permission = permission;
+      }
+    });
+  }
+}
+
+const fireNotification = (text, title) => {
+  if (Notification.permission === 'granted') {
+
+    let notification = new Notification(title, {
+      //icon: 'http://icons.iconarchive.com/icons/sicons/flat-shadow-social/256/facebook-icon.png',
+      body: text
+    });
+
+    setTimeout(notification.close.bind(notification), 5000);
+  }
+}
+
+const loadMyCode = (unit) => {
+  
+  let list = document.getElementById("list-view-icon-list");
+  let blok = document.getElementById("list-view-icon-blok");
+  let kotOverview =  document.getElementById('kotOverviewAll');
+  list.addEventListener('click', (e) => {
+    e.preventDefault();
+    kotOverview.classList.toggle('list-view');
+    list.classList.toggle('invisible');
+    blok.classList.toggle('invisible');
+  });
+  blok.addEventListener('click', (e) => {
+    e.preventDefault();
+    kotOverview.classList.toggle('list-view');
+    list.classList.toggle('invisible');
+    blok.classList.toggle('invisible');
+  });
+  if (unit !== 'baas'){
+    let fire = document.getElementById('list-view-icon-fire');
+    fire.addEventListener('click', (e) => {
+      e.preventDefault();
+      console.log('fire');
+      alert('fire!!!');
+    });
+  }
+}
+
+const getLikedKoten = () => {
+  const userId = localStorage.getItem('currentUserId');
+  console.log(userId);
+  const koten = document.getElementById('collection-favorites');
+  koten.innerHTML = '';
+  const ref = database.ref('likes/');
+  ref.on('value', (snapshot) => {
+    snapshot.forEach((childSnapshot) => {
+      const like = childSnapshot.val();
+      if(like.liker == userId){
+        console.log(like.liked);
+        const kot = JSON.parse(localStorage[like.liked]);
+        let status = 'liked';
+        const fotoArray = kot.foto.split(',');
+        koten.innerHTML += `<a href="/#/kotDetail/id=${  like.liked  }/" class="kotOverview uniqueKot" id="${  like.liked  }"><span class="price">€${  kot.info.prijs  }</span><i class="fas fa-heart kot-like ${  status  }" id="likeKey=${  like.liked  }"></i></a>`;
+        document.getElementById(like.liked).style.backgroundImage = `url('${  fotoArray[0]  }')`;
+      };
+    });
+  });
+}
+
 export {
   signOutFirebase,
   signInFirebase,
@@ -695,4 +864,9 @@ export {
   sidenavFunctie,
   loadMyKoten,
   updateKot,
+  sendNotification,
+  loadMyCode,
+  loadKotenFromLocStor,
+  loadAllKoten,
+  getLikedKoten,
 };
