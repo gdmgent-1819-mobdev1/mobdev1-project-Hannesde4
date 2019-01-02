@@ -1,5 +1,5 @@
 import config from '../config';
-
+import mapboxgl from 'mapbox-gl';
 
 const { getInstance } = require('../firebase/firebase');
 
@@ -190,6 +190,8 @@ const generateAndStoreKotId = () => {
   if (!(localStorage.kotIdGenerate)) {
     const kotId = firebase.database().ref().child('koten').push().key;
     localStorage.kotIdGenerate = kotId;
+    localStorage['kotInDetail'] = kotId
+    console.log(localStorage['kotInDetail']);
   } else {
     console.log('er is al een kot-id');
   }
@@ -229,7 +231,7 @@ const newKotToDatabase = (userId) => {
     writeKotData(localStorage.kotIdGenerate, place, street, extra, lattitude, longitude, price, extraInfo, type, oppervlakte, verdieping, maxPersons, kotenInPand, douche, bad, toilet, keuken, bemeubeld, userId);
     // na het opslaan wordt er een nieuwe kotKey gegenereerd
     generateAndStoreKotId();
-    //window.location.href="/";
+    window.location.href="/";
   });
 };
 
@@ -416,10 +418,10 @@ const loadKotenFromLocStor = () => {
 const startConversation = () => {
   let keyer = localStorage.kotInDetail;
   const kot = JSON.parse(localStorage[keyer]);
-  const studentId = firebase.auth().currentUser.uid;
+  const studentId = localStorage.getItem('currentUserId');
   const kotbaasId = kot.kotbaas;
   const message = document.getElementById('message').value;
-  if(studentId == kotbaasId){
+  if(studentId !== kotbaasId){
     alert('U kunt niet met uzelf chatten');
   } else {
     // create chatId with studentId, kotbaasId and kotKey
@@ -432,6 +434,9 @@ const startConversation = () => {
         window.location.href = '/#/singleChat';
       }else{
         sendMessage(chatId, studentId, message);
+        let bericht = 'Uw bericht werd succesvol verzonden';
+        let title = 'Bericht verzonden';
+        sendNotification(bericht, title);
       }
     });
   }
@@ -473,7 +478,7 @@ const getAllMessagesFromCurrentUser = () => {
             let reference = database.ref('conversations/messages/' + childKey)
             reference.orderByKey().limitToLast(1).on("child_added", (snapshot) => {
               let message = snapshot.val();
-              let previousMessage = message.message;
+              let previousMessage = message.message.substr(0, 30) + "...";
               let adresExtra = '';
               if(kot.adress.extra){
                 adresExtra = ' ' + kot.adress.extra; 
@@ -603,9 +608,9 @@ const loadMyKoten = () => {
         const childKey = childSnapshot.key;
         const kot = childSnapshot.val();
         const fotoArray = kot.foto.split(',');
-        if (kot.kotbaas == firebase.auth().currentUser.uid){
+        if (kot.kotbaas == localStorage.getItem('currentUserId')){
         const koten = document.getElementById('kotOverviewAll');
-        koten.innerHTML += `<a class="kotOverview uniqueKot" id="${  childKey  }"><span class="price">€${  kot.info.prijs  }</span><div class="pinMap id="mapKey=${  childKey  }"><i class="fas fa-map-marker-alt kot-marker-map"></i></div></a>`;
+        koten.innerHTML += `<a class="kotOverview uniqueKot" id="${  childKey  }"><span class="price">€${  kot.info.prijs  }</span><div class="pinMap id="mapKey=${  childKey  }"></div></a>`;
         document.getElementById(childKey).style.backgroundImage = `url('${  fotoArray[0]  }')`;
         }
       });
@@ -840,6 +845,35 @@ const getLikedKoten = () => {
   });
 }
 
+const allKotenToMap = () => {
+  if (config.mapBoxToken) {
+    mapboxgl.accessToken = config.mapBoxToken;
+    // eslint-disable-next-line no-unused-vars
+    const map = new mapboxgl.Map({
+      container: 'map',
+      center: [3.717424, 51.054340],
+      style: 'mapbox://styles/mapbox/streets-v9',
+      zoom: 12,
+    });
+
+    const pointers = JSON.parse(localStorage.getItem('pointers'));
+    console.log(pointers);
+
+    //gaat een pijl tekenen op de kaart
+    map.on('load', () => {
+      pointers.forEach((pointer) => {
+        new mapboxgl.Marker()
+          .setLngLat([pointer.lattitude, pointer.longitude])
+          .setPopup(new mapboxgl.Popup({ offset: 25 })
+            .setHTML(`<img class="pointer" src="${pointer.image}"></img><p>${pointer.adress}</p><p>Huurprijs: €${pointer.price}</p>`))
+          .addTo(map);
+        });
+      });
+  } else {
+    console.error('Mapbox will crash the page if no access token is given.');
+  }
+}
+
 export {
   signOutFirebase,
   signInFirebase,
@@ -869,4 +903,5 @@ export {
   loadKotenFromLocStor,
   loadAllKoten,
   getLikedKoten,
+  allKotenToMap,
 };

@@ -31,22 +31,16 @@ export default () => {
       container: 'map',
       center: [lattitude, longitude],
       style: 'mapbox://styles/mapbox/streets-v9',
-      zoom: 14,
+      zoom: 15,
     });
-
-    const pointers = JSON.parse(localStorage.getItem('pointers'));
-    console.log(pointers);
-
+    
     //gaat een pijl tekenen op de kaart
     map.on('load', () => {
-        pointers.forEach((pointer) => {
-          new mapboxgl.Marker()
-            .setLngLat([pointer.lattitude, pointer.longitude])
-            .setPopup(new mapboxgl.Popup({ offset: 25 })
-              .setHTML(`<img class="pointerImage" src="${pointer.image}"></img><p>${pointer.adress}</p><p>Huurprijs: €${pointer.price}</p>`))
-            .addTo(map);
-        });
-      });
+        new mapboxgl.Marker()
+        .setLngLat([lattitude, longitude])
+        .setPopup(new mapboxgl.Popup({ offset: 25 }))
+        .addTo(map);
+    });
   } else {
     console.error('Mapbox will crash the page if no access token is given.');
   }

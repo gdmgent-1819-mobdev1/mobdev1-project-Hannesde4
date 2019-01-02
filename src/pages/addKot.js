@@ -13,6 +13,7 @@ import {
     checkUserStatusForNav,
     database,
     sidenavFunctie,
+    sendNotification
 } from '../helpers/functies';
 
 
@@ -57,8 +58,11 @@ export default () => {
         const form = document.getElementById('submit-new-kot');
         if (form.checkValidity()) {
             e.preventDefault();
-            console.log(userId);
             newKotToDatabase(userId);
+            let message = 'Uw kot werdt succesvol geregistreerd';
+            let title = 'Kot toegevoegd';
+            sendNotification(message, title);
+            window.location.href = '/#/mijnKotenDetail';
           };
     });
 };

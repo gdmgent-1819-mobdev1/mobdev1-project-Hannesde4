@@ -6,27 +6,26 @@
     <div class="wrapper collection-mijn-koten" id="collectionMyKoten">
         <form action="" class="start-conversation" id="update-kotInfo">
         
-        {{!-- <label>Foto's uploaden</label>
+        <label>Foto's uploaden</label>
         <div class="image-kot-content">
             <div id="kot-image-first" class="kot-file-upload">
                 <img src="{{fotoArray1}}" alt="">
-                <input type="file" id="file-first" class="kot-file-upload" name="file">
             </div>
             <div class="kot-upload-small-collect">
                 <div id="kot-image-second" class="kot-file-upload small">
                     <img src="{{fotoArray2}}" alt="">
-                    <input type="file" id="file-second" class="kot-file-upload small" name="file">
                 </div>
                 <div id="kot-image-third" class="kot-file-upload small">
                     <img src="{{fotoArray3}}" alt="" align="middle">
-                    <input type="file" id="file-third" class="kot-file-upload small" name="file">
                 </div>
             </div>
-        </div> --}}
+        </div>
+        
         <label for="register-kot-price">Prijs</label>
         <input type="number" name="register-kot-price" id="register-kot-price" placeholder="€350" value="{{kot.info.prijs}}" required>
         <label for="register-kot-info">Korte omschrijving</label>
         <textarea type="text" name="register-kot-info" id="register-kot-info" required placeholder="">{{kot.info.extraInfo}}</textarea>
+        <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button_count" data-size="large" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Delen</a></div>
 
         <h3>Overzicht</h3>
 
@@ -100,6 +99,7 @@
 
         <button class="btn-basic" id="btn-kot-update-my-kot">Wijzigingen bewaren</button>
         </form>
+        <button class="btn-basic" id="btn-kot-delete-my-kot">Kot verwijderen</button>
     </div>
 </div>
 

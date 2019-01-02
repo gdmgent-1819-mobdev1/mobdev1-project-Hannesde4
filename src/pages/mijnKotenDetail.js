@@ -1,7 +1,7 @@
 // Only import the compile function from handlebars instead of the entire library
 import { compile } from 'handlebars';
 import update from '../helpers/update';
-import {checkUserStatusForNav, sidenavFunctie, updateKot, handleFileSelect1, handleFileSelect2, handleFileSelect3} from '../helpers/functies';
+import {checkUserStatusForNav, sidenavFunctie, updateKot, handleFileSelect1, handleFileSelect2, handleFileSelect3, database, sendNotification} from '../helpers/functies';
 
 
 // Import the template to use
@@ -50,4 +50,29 @@ export default () => {
         const place = document.getElementById('register-kot-place').value;
         updateKot(localStorage.kotInDetail, place, street, extra, price, extraInfo, type, oppervlakte, verdieping, maxPersons, kotenInPand, douche, bad, toilet, keuken, bemeubeld, localStorage.currentUserId);
       });
+  document.getElementById('btn-kot-delete-my-kot').addEventListener('click', (e) => {
+    e.preventDefault();
+    database.ref('koten/'+localStorage.kotInDetail).remove();
+    let message = 'Uw kot werdt succesvol verwijderd';
+    let title = 'Kot verwijderd';
+    sendNotification(message, title);
+    const ref = database.ref('likes/');
+    ref.on('value', (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+        const likeKey = childSnapshot.key;
+        const like = childSnapshot.val();
+        console.log(like);
+        console.log('storage: ' +localStorage.kotInDetail);
+        console.log('like: ' +like.liked);
+        if(like.liked == localStorage.kotInDetail){
+          console.log('likes/'+likeKey);
+          database.ref('likes/'+likeKey).remove();;
+        };
+        localStorage.removeItem(localStorage.kotInDetail);
+      });
+    });
+    setTimeout(function(){
+      window.location.href = '/';
+    }, 500);
+  });
 };

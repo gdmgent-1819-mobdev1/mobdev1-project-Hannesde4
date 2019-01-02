@@ -1,7 +1,7 @@
 // Only import the compile function from handlebars instead of the entire library
 import { compile } from 'handlebars';
 import update from '../helpers/update';
-import {signOutFirebase, firebase, checkUserStatusForNav, database, sidenavFunctie, loadAllKoten} from '../helpers/functies';
+import {signOutFirebase, firebase, checkUserStatusForNav, database, sidenavFunctie, loadAllKoten, allKotenToMap} from '../helpers/functies';
 
 // Import the template to use
 const kotOveviewTemplate = require('../templates/kotOverview.handlebars');
@@ -45,12 +45,10 @@ export default () => {
         e.preventDefault();
         //er wordt gekeken of er geklikt is op een i-element
         if(e.target && e.target.nodeName == 'I'){
-            console.log('test');
             let userId = localStorage.getItem('currentUserId');
             let key = e.target.id;
             let parts = key.split('likeKey=');
             let likeId = userId+'+++'+parts[1];
-            console.log(likeId);
             if( e.target.classList[0] !== 'liked'){
                 database.ref('likes/' + likeId).set({
                     'liker' : userId ,
@@ -74,6 +72,8 @@ function loadMyCode(){
     let list = document.getElementById("list-view-icon-list");
     let blok = document.getElementById("list-view-icon-blok");
     let kotOverview =  document.getElementById('kotOverviewAll');
+    let map = document.getElementById("list-view-icon-map");
+    let mapbox = document.getElementById("map");
     list.addEventListener('click', (e) => {
         e.preventDefault();
         kotOverview.classList.toggle('list-view');
@@ -90,6 +90,13 @@ function loadMyCode(){
         e.preventDefault();
         console.log('fire');
         alert('fire!!!');
+    });
+    map.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('map');
+        kotOverview.classList.toggle('invisible');
+        mapbox.classList.toggle('invisible');
+        allKotenToMap();
     });
     let filter = document.getElementById('chose-sorting-method');
     filter.onchange = () =>{
